@@ -20,7 +20,7 @@ const styles = {
     borderRadius: 5,
   },
 };
-const AudioPlayer = ({ audioUrl = "", tagLabel = "Audio" }) => {
+const AudioPlayer = ({ audioUrl = "", tagLabel = "Audio", fileName = "" }) => {
   const containerRef = useRef(null);
   
   const { wavesurfer, isPlaying } = useWavesurfer({
@@ -48,7 +48,7 @@ const AudioPlayer = ({ audioUrl = "", tagLabel = "Audio" }) => {
   }, [wavesurfer]);
 
   const onDownload = useCallback(() => {
-    saveAs(audioUrl, "audio.mp3");
+    saveAs(audioUrl, `converted_${fileName}`);
     
   }, [audioUrl]);
 
@@ -61,7 +61,7 @@ const AudioPlayer = ({ audioUrl = "", tagLabel = "Audio" }) => {
             <Tag color="default">{tagLabel}</Tag>
           </Col>
           <Col span={20}>
-            <p style={{ color: "#FFF" }}>{audioUrl}</p>
+            <p style={{ color: "#FFF" }}>{fileName}</p>
           </Col>
         </Row>
         <Row justify={"space-around"}>
