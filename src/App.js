@@ -17,11 +17,11 @@ const App = () => {
     <div>
       <AudioRecorder onRecordComplete={handleAudioInput} />
       <UploadAudio onUpload={handleAudioInput} /> {/* Component upload */}
-      {uploadedAudioUrl && (
+      {(
         <AudioPlayer
           audioUrl={
             uploadedAudioUrl ||
-            "https://cdn.hoclieuthongminh.com/bt-games/number_cards/audio/win.mp3"
+            "https://res.cloudinary.com/dngrdkoos/video/upload/v1729171056/m2vmoyfpijhwqyqoiniy.mp3"
           }
           fileName={uploadedFileName || "win.mp3"}
           tagLabel={uploadedAudioUrl ? "Uploaded Audio" : "Original Audio"}
