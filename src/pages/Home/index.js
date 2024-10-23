@@ -1,8 +1,6 @@
-import VoiceRecorder from '../../components/VoiceRecorder';
-
 function Home() {
     return (<>
-        <VoiceRecorder />
+        Home
     </>);
 }
 

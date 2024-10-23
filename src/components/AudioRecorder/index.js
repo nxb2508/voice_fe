@@ -5,7 +5,7 @@ import { Button, Select, Card, Typography, Space } from "antd";
 import { saveAs } from "file-saver";
 const { Option } = Select;
 const { Title, Text } = Typography;
-const AudioRecorder = () => {
+const AudioRecorder = ({onRecordComplete}) => {
   const waveformRef = useRef(null);
   const containerRecordingsRef = useRef(null);
   const [record, setRecord] = useState(null);
@@ -35,22 +35,8 @@ const AudioRecorder = () => {
 
     rec.on("record-end", (blob) => {
       const recordedUrl = URL.createObjectURL(blob);
-      const wavesurferInstance = WaveSurfer.create({
-        container: containerRecordingsRef.current,
-        waveColor: "rgb(200, 100, 0)",
-        progressColor: "rgb(100, 50, 0)",
-        url: recordedUrl,
-      });
-
-      const playButton = document.createElement("button");
-      playButton.textContent = "Play";
-      playButton.onclick = () => wavesurferInstance.playPause();
-      containerRecordingsRef.current.appendChild(playButton);
-
-      const downloadLink = document.createElement("button");
-      downloadLink.textContent = "Download";
-      downloadLink.onclick = () => saveAs(blob, "recording.wav");
-      containerRecordingsRef.current.appendChild(downloadLink);
+      const fileName = "recording.wav";
+      onRecordComplete(recordedUrl, fileName);
     });
 
     rec.on("record-progress", (time) => {
@@ -121,6 +107,7 @@ const AudioRecorder = () => {
             border: "1px solid #ddd",
             borderRadius: "4px",
             marginTop: "1rem",
+            display: "none",
           }}
         ></div>
         <div ref={containerRecordingsRef} style={{ margin: "1rem 0" }}></div>
