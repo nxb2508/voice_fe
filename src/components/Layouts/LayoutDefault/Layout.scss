@@ -1,0 +1,36 @@
+.layout {
+
+  background: #141318;
+
+  &__header {
+    display: flex;
+    background: #26252E;
+    height: 72px;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+  }
+
+  &__logo {
+    width: 230px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    font-size: 20px;
+    font-weight: 800;
+
+    a {
+      color: #FFF;
+    }
+
+    &--fold {
+      width: 80px;
+    }
+  }
+
+  &__content {
+    background: #1E1D24;
+    padding: 25px;
+  }
+}

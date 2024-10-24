@@ -1,15 +1,17 @@
-import { images } from "../../../constants";
+import { Link } from "react-router-dom";
 
 function Header() {
-
-  console.log(images.Logo)
-
   return (
-    <header>
-      <div>
-        {/* <img src={images.Logo} alt="logo" /> */}
+    <header className="layout__header">
+      <div
+        className={
+          "layout__logo "
+        }
+      >
+        <Link to="/voice-changer">{"Voice Tools"}</Link>
       </div>
-      
+      <div className="layout__nav">
+      </div>
     </header>
   );
 }

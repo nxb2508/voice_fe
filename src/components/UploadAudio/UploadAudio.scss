@@ -1,0 +1,35 @@
+.upload {
+  padding: 20px;
+  width: 100%;
+  background: #1e1d24;
+  border: dashed 1px rgb(229, 231, 235);
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &__title {
+    text-align: center;
+    color: #fff;
+    font-size: 0.875rem;
+    margin-bottom: 20px;
+    margin-top: 20px;
+  }
+
+  &__image {
+    aspect-ratio: 1;
+    width: 20%;
+  }
+}
+
+.ant-upload {
+  display: block !important;
+  width: 100% !important;
+}
+.ant-upload-wrapper {
+  width: 100%;
+  display: block !important;
+  background: #1e1d24;
+}

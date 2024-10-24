@@ -1,0 +1,42 @@
+.voice-changer__container {
+  min-height: 521px;
+  max-height: 640px;
+}
+
+.voice-changer {
+  &__title {
+    text-align: center;
+    background: linear-gradient(90deg, #a2fffd 0%, #fb71fe 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  &__content {
+    padding: 20px;
+    display: flex;
+    align-items: stretch;
+    height: 100%;
+  }
+
+  &__models {
+    width: 30%;
+    margin-right: 20px;
+    height: 100%;
+  }
+
+  &__audio {
+    width: 70%;
+    height: 100%;
+  }
+}
+
+
+.voice-changer__input {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.voice-changer__input--title {
+    margin-bottom: 5px;
+}
