@@ -25,7 +25,7 @@ const App = () => {
   }, []); // Không có dependency để đảm bảo chỉ được tạo một lần
 
   useEffect(() => {
-    // console.log("inputAudioUrl", inputAudioUrl);
+    console.log("inputAudioUrl", inputAudioUrl);
   }, [inputAudioUrl]);
 
   const handleChangeVoice = useCallback(async () => {

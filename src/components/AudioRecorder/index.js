@@ -5,7 +5,17 @@ import { Button, Select, Card, Typography, Space } from "antd";
 import { saveAs } from "file-saver";
 const { Option } = Select;
 const { Title, Text } = Typography;
-const AudioRecorder = ({onRecordComplete}) => {
+function blobToBase64(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      resolve(reader.result);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+const AudioRecorder = ({ onRecordComplete }) => {
   const waveformRef = useRef(null);
   const containerRecordingsRef = useRef(null);
   const [record, setRecord] = useState(null);
@@ -36,7 +46,14 @@ const AudioRecorder = ({onRecordComplete}) => {
     rec.on("record-end", (blob) => {
       const recordedUrl = URL.createObjectURL(blob);
       const fileName = "recording.wav";
-      onRecordComplete(recordedUrl, fileName);
+      fetch(recordedUrl)
+        .then((response) => response.blob())
+        .then((blob) => blobToBase64(blob))
+        .then((base64) => {
+          onRecordComplete(base64, fileName);
+        })
+        .catch((error) => console.error("Error:", error));
+      // onRecordComplete(recordedUrl, fileName);
     });
 
     rec.on("record-progress", (time) => {
@@ -62,8 +79,10 @@ const AudioRecorder = ({onRecordComplete}) => {
       record.stopRecording();
       recButtonRef.current.textContent = "Record";
     } else {
-      while(containerRecordingsRef.current.firstChild) {
-        containerRecordingsRef.current.removeChild(containerRecordingsRef.current.firstChild);
+      while (containerRecordingsRef.current.firstChild) {
+        containerRecordingsRef.current.removeChild(
+          containerRecordingsRef.current.firstChild
+        );
       }
       const deviceId = selectedDevice;
       record.startRecording({ deviceId }).then(() => {
