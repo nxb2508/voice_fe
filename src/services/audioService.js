@@ -1,4 +1,3 @@
-import { post } from "../utils/request";
 import { API_DOMAIN } from "../constants/variables";
 
 export const changeVoiceWithSelectedModel = async ({ options }) => {
@@ -6,14 +5,14 @@ export const changeVoiceWithSelectedModel = async ({ options }) => {
   console.log("options", options);
 
   // Append the audio file and model_id to the form data
-  formData.append("file", options.audio); // Ensure "file" is the correct field name
+  formData.append("file", options.audio, 'input.wav'); // Ensure "file" is the correct field name
   formData.append("model_id", options.modelId);
 
   console.log("formData", formData);
 
   try {
     // Fetch request to API
-    const response = await fetch(API_DOMAIN + "infer-audio", {
+    const response = await fetch(API_DOMAIN + "infer-audio/", {
       method: "POST",
       headers: new Headers({
         "ngrok-skip-browser-warning": "69420",

@@ -7,10 +7,21 @@ import ModelList from "./components/ModelList";
 import { changeVoiceWithSelectedModel } from "./services/audioService";
 import { Modal, Tag, Button } from "antd";
 import { useState, useCallback, useEffect } from "react";
+function base64ToBlob(base64, mimeType) {
+  const byteString = atob(base64.split(",")[1]);
+  const ab = new ArrayBuffer(byteString.length);
+  const ia = new Uint8Array(ab);
 
+  for (let i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+
+  return new Blob([ab], { type: mimeType });
+}
 const App = () => {
   const [inputAudioUrl, setInputAudioUrl] = useState("");
   const [inputFileName, setInputFileName] = useState("");
+  const [inputType, setInputType] = useState("");
   const [selectedModels, setSelectedModels] = useState(null);
   const [outputAudioUrl, setOutputAudioUrl] = useState("");
   const [loading, setLoading] = useState(false); // Thêm trạng thái loading
@@ -19,29 +30,47 @@ const App = () => {
     setSelectedModels(id);
   }, []); // Không có dependency để đảm bảo chỉ được tạo một lần
 
-  const handleChangeAudioInput = useCallback((url, name) => {
+  const handleChangeAudioInput = useCallback((url, name, inputType) => {
     setInputAudioUrl(url);
     setInputFileName(name);
+    setInputType(inputType);
   }, []); // Không có dependency để đảm bảo chỉ được tạo một lần
 
-  useEffect(() => {
-    console.log("inputAudioUrl", inputAudioUrl);
-  }, [inputAudioUrl]);
+  // useEffect(() => {
+  //   console.log("inputAudioUrl", inputAudioUrl);
+  // }, [inputAudioUrl]);
 
   const handleChangeVoice = useCallback(async () => {
     setLoading(true); // Bật trạng thái loading trước khi gọi API
     try {
       // inputAudioUrl lúc này là Blob, không cần fetch từ URL nữa
-      const audioBlob = inputAudioUrl;
+      // const audioBlob = inputAudioUrl;
 
-      // Tạo một đối tượng File từ Blob (nếu cần)
-      const audioFile = new File([audioBlob], inputFileName || "audio.wav", {
-        type: audioBlob.type || "audio/wav", // Cung cấp kiểu MIME
-      });
+      // // Tạo một đối tượng File từ Blob (nếu cần)
+      // const audioFile = new File([audioBlob], inputFileName || "audio.wav", {
+      //   type: audioBlob.type || "audio/wav", // Cung cấp kiểu MIME
+      // });
 
+      console.log(inputType);
+
+      let audioBlob = null;
+
+      if (inputType === "record") {
+        console.log("record");
+        await fetch(inputAudioUrl)
+          .then((response) => response.blob()) // Lấy dữ liệu dưới dạng Blob
+          .then((blob) => {
+            audioBlob = blob;
+          })
+          .catch((error) => console.error("Error fetching Blob:", error));
+      } else {
+        audioBlob = base64ToBlob(inputAudioUrl, "audio/wav");
+      }
+
+      console.log(audioBlob);
       const result = await changeVoiceWithSelectedModel({
         options: {
-          audio: audioFile,
+          audio: audioBlob,
           modelId: selectedModels,
         },
       });
@@ -56,7 +85,7 @@ const App = () => {
     } finally {
       setLoading(false); // Tắt trạng thái loading sau khi hoàn thành API call
     }
-  }, [selectedModels, inputAudioUrl, inputFileName]);
+  }, [selectedModels, inputAudioUrl, inputType]);
 
   // const handleChangeVoice = useCallback(async () => {
   //   setLoading(true); // Bật trạng thái loading trước khi gọi API

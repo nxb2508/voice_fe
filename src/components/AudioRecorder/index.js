@@ -46,14 +46,7 @@ const AudioRecorder = ({ onRecordComplete }) => {
     rec.on("record-end", (blob) => {
       const recordedUrl = URL.createObjectURL(blob);
       const fileName = "recording.wav";
-      fetch(recordedUrl)
-        .then((response) => response.blob())
-        .then((blob) => blobToBase64(blob))
-        .then((base64) => {
-          onRecordComplete(base64, fileName);
-        })
-        .catch((error) => console.error("Error:", error));
-      // onRecordComplete(recordedUrl, fileName);
+      onRecordComplete(recordedUrl, fileName, 'record');
     });
 
     rec.on("record-progress", (time) => {

@@ -14,7 +14,7 @@ const UploadAudio = ({ onUpload }) => {
     setLoading(true);
     const reader = new FileReader();
     reader.onload = (e) => {
-      onUpload(e.target.result, fileName); // Truyền file audio đã load vào AudioPlayer
+      onUpload(e.target.result, fileName, 'upload'); // Truyền file audio đã load vào AudioPlayer
       message.success("Tải file lên thành công!");
       setLoading(false);
     };
