@@ -1,5 +1,6 @@
 - Tải npm trước
-- Clone project về
+- Fork project về account mình
+- Clone project vừa fork về
 - Chạy terminal npm i để tải các thư viện
 - Để chạy project npm start
 - Vào src/constants/variables chỉnh API_DOMAIN thành local nếu test ở local
