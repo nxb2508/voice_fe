@@ -1,6 +1,7 @@
 import { Navigate } from "react-router-dom";
 import LayoutDefault from "../components/Layouts/LayoutDefault";
 import VoiceChanger from "../pages/VoiceChanger";
+import TextToSpeech from "../pages/TextToSpeech";
 export const routes = [
   // Public
   {
@@ -10,6 +11,14 @@ export const routes = [
       {
         index: true,
         element: <VoiceChanger />,
+      },
+      {
+        path: "voice-changer",
+        element: <VoiceChanger />,
+      },
+      {
+        path: "text-to-speech",
+        element: <TextToSpeech />,
       },
       {
         path: "*",

@@ -24,12 +24,14 @@
   }
 }
 
-.ant-upload {
-  display: block !important;
-  width: 100% !important;
-}
-.ant-upload-wrapper {
-  width: 100%;
-  display: block !important;
-  background: #1e1d24;
+.upload-container {
+  .ant-upload {
+    display: block !important;
+    width: 100% !important;
+  }
+  .ant-upload-wrapper {
+    width: 100%;
+    display: block !important;
+    background: #1e1d24;
+  }
 }

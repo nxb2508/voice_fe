@@ -30,7 +30,7 @@ const UploadAudio = ({ onUpload }) => {
   );
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
+    <div className="upload-container" style={{ display: "flex", justifyContent: "center", width: "100%" }}>
       <Upload
         accept="audio/*"
         showUploadList={false}

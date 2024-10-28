@@ -49,8 +49,8 @@ const models = [
   },
 ];
 
-function ModelList({ onSelectModel }) {
-  const [data, setData] = useState([]);
+function ModelList({ onSelectModel, clearSelectedModel }) {
+  const [data, setData] = useState(models);
   const [selectedModels, setSelectedModels] = useState(null);
 
   useEffect(() => {
@@ -66,6 +66,12 @@ function ModelList({ onSelectModel }) {
   useEffect(() => {
     console.log(selectedModels);
   }, [selectedModels]);
+
+  useEffect(() => {
+    if (clearSelectedModel) {
+      setSelectedModels(null);
+    }
+  }, [clearSelectedModel]);
 
   const handleSelectModel = (id) => {
     setSelectedModels(id);

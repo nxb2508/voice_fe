@@ -1,10 +1,10 @@
 .layout {
-
   background: #141318;
 
   &__header {
     display: flex;
-    background: #26252E;
+    background: #26252e;
+    justify-content: space-between;
     height: 72px;
     position: sticky;
     top: 0;
@@ -21,7 +21,7 @@
     font-weight: 800;
 
     a {
-      color: #FFF;
+      color: #fff;
     }
 
     &--fold {
@@ -30,7 +30,38 @@
   }
 
   &__content {
-    background: #1E1D24;
+    background: #1e1d24;
     padding: 25px;
+  }
+
+  &__nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    a {
+      color: #fff;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 600;
+      margin-right: 30px;
+      display: flex;
+      align-items: center;
+      height: 100%;
+
+      &:hover {
+        text-align: center;
+        background: linear-gradient(90deg, #a2fffd 0%, #fb71fe 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      &.active {
+        text-align: center;
+        background: linear-gradient(90deg, #a2fffd 0%, #fb71fe 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    }
   }
 }
