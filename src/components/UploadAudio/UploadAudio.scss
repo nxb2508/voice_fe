@@ -1,6 +1,7 @@
 .upload {
   padding: 20px;
   width: 100%;
+  height: 100%;
   background: #1e1d24;
   border: dashed 1px rgb(229, 231, 235);
   border-radius: 10px;
@@ -28,6 +29,7 @@
   .ant-upload {
     display: block !important;
     width: 100% !important;
+    height: 100%;
   }
   .ant-upload-wrapper {
     width: 100%;

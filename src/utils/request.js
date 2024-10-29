@@ -1,6 +1,7 @@
 import { API_DOMAIN } from "../constants/variables";
 
 export const get = async (path) => {
+  console.log("API_DOMAIN", API_DOMAIN);
   const response = await fetch(API_DOMAIN + path, {
     method: "get",
     headers: new Headers({

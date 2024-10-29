@@ -91,9 +91,13 @@ function TextToSpeech() {
         setOutputAudioUrl(result); // Set URL của audio kết quả
       } else {
         console.error("Failed to change voice");
+        message.error("Failed to change voice. Please try again.");
       }
     } catch (error) {
       console.error("Error during voice change:", error);
+      message.error(
+        "An error occurred while processing. Please try again later."
+      );
     } finally {
       setLoading(false); // Tắt trạng thái loading sau khi hoàn thành API call
     }

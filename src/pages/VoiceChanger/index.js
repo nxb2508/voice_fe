@@ -3,7 +3,7 @@ import AudioRecorder from "../../components/AudioRecorder";
 import UploadAudio from "../../components/UploadAudio";
 import ModelList from "../../components/ModelList";
 import { changeVoiceWithSelectedModel } from "../../services/audioService";
-import { Modal, Tag, Button, Divider, Row, Col } from "antd";
+import { Modal, Tag, Button, Divider, Row, Col, message } from "antd";
 import { useState, useCallback, useEffect } from "react";
 import { DeleteOutlined } from "@ant-design/icons";
 import "./VoiceChanger.scss";
@@ -20,6 +20,7 @@ function base64ToBlob(base64, mimeType) {
 }
 
 function VoiceChanger() {
+  const [inputAudioBlob, setInputAudioBlob] = useState(null);
   const [inputAudioUrl, setInputAudioUrl] = useState("");
   const [inputFileName, setInputFileName] = useState("");
   const [inputType, setInputType] = useState("");
@@ -31,47 +32,31 @@ function VoiceChanger() {
     setSelectedModels(id);
   }, []); // Không có dependency để đảm bảo chỉ được tạo một lần
 
-  const handleChangeAudioInput = useCallback((url, name, inputType) => {
+  const handleChangeAudioUrlInput = (url, name, inputType) => {
     setInputAudioUrl(url);
+    setInputAudioBlob(base64ToBlob(url, "audio/wav"));
     setInputFileName(name);
     setInputType(inputType);
-  }, []); // Không có dependency để đảm bảo chỉ được tạo một lần
+  };
+
+  const handleChangeAudioBlobInput = (blob, name, inputType) => {
+    setInputAudioBlob(blob);
+    setInputAudioUrl(URL.createObjectURL(blob));
+    setInputFileName(name);
+    setInputType(inputType);
+  };
 
   // useEffect(() => {
-  //   console.log("inputAudioUrl", inputAudioUrl);
-  // }, [inputAudioUrl]);
+  //   console.log(inputAudioBlob);
+  //   console.log(inputAudioUrl);
+  // }, [inputAudioBlob, inputAudioUrl]);
 
   const handleChangeVoice = useCallback(async () => {
     setLoading(true); // Bật trạng thái loading trước khi gọi API
     try {
-      // inputAudioUrl lúc này là Blob, không cần fetch từ URL nữa
-      // const audioBlob = inputAudioUrl;
-
-      // // Tạo một đối tượng File từ Blob (nếu cần)
-      // const audioFile = new File([audioBlob], inputFileName || "audio.wav", {
-      //   type: audioBlob.type || "audio/wav", // Cung cấp kiểu MIME
-      // });
-
-      console.log(inputType);
-
-      let audioBlob = null;
-
-      if (inputType === "record") {
-        console.log("record");
-        await fetch(inputAudioUrl)
-          .then((response) => response.blob()) // Lấy dữ liệu dưới dạng Blob
-          .then((blob) => {
-            audioBlob = blob;
-          })
-          .catch((error) => console.error("Error fetching Blob:", error));
-      } else {
-        audioBlob = base64ToBlob(inputAudioUrl, "audio/wav");
-      }
-
-      console.log(audioBlob);
       const result = await changeVoiceWithSelectedModel({
         options: {
-          audio: audioBlob,
+          audio: inputAudioBlob,
           modelId: selectedModels,
         },
       });
@@ -80,13 +65,17 @@ function VoiceChanger() {
         setOutputAudioUrl(result); // Set URL của audio kết quả
       } else {
         console.error("Failed to change voice");
+        message.error("Failed to change voice. Please try again.");
       }
     } catch (error) {
       console.error("Error during voice change:", error);
+      message.error(
+        "An error occurred while processing. Please try again later."
+      );
     } finally {
       setLoading(false); // Tắt trạng thái loading sau khi hoàn thành API call
     }
-  }, [selectedModels, inputAudioUrl, inputType]);
+  }, [selectedModels, inputAudioBlob, inputAudioUrl, inputType]);
   return (
     <>
       <Modal
@@ -101,7 +90,7 @@ function VoiceChanger() {
       <h1 className="voice-changer__title">AI Voice Changer</h1>
       <div className="voice-changer__container">
         <div className="voice-changer__content">
-          {inputAudioUrl ? (
+          {inputAudioUrl || inputAudioBlob ? (
             <>
               <div className="voice-changer__models">
                 <ModelList onSelectModel={handleSelectModel} />
@@ -138,6 +127,7 @@ function VoiceChanger() {
                     danger
                     icon={<DeleteOutlined />}
                     onClick={() => {
+                      setInputAudioBlob(null);
                       setInputAudioUrl("");
                       setInputFileName("");
                       setSelectedModels(null);
@@ -167,7 +157,7 @@ function VoiceChanger() {
                   {outputAudioUrl && (
                     <AudioPlayer
                       audioUrl={outputAudioUrl}
-                      fileName={inputFileName || "win.mp3"}
+                      fileName={"converted-" + inputFileName}
                       tagLabel={"Change Audio"}
                     />
                   )}
@@ -175,36 +165,28 @@ function VoiceChanger() {
               </div>
             </>
           ) : (
-            <UploadAudio onUpload={handleChangeAudioInput} />
+            <>
+              <Row
+                gutter={16}
+                justify="space-between"
+                style={{ width: "100%", height: "500px" }}
+              >
+                <Col className="gutter-row" span={12}>
+                  <AudioRecorder
+                    onRecordComplete={handleChangeAudioBlobInput}
+                  />
+                </Col>
+                <Col className="gutter-row" span={12}>
+                  <UploadAudio
+                    onUpload={handleChangeAudioUrlInput}
+                    style={{ height: "100%" }}
+                  />
+                </Col>
+              </Row>
+            </>
           )}
         </div>
       </div>
-
-      {/* {inputAudioUrl && <ModelList onSelectModel={handleSelectModel} />}
-      {selectedModels && (
-        <div>
-          <Tag color="magenta">{selectedModels}</Tag>
-        </div>
-      )}
-      {inputAudioUrl && (
-        <AudioPlayer
-          audioUrl={inputAudioUrl}
-          fileName={inputFileName}
-          tagLabel={"Original Audio"}
-        />
-      )}
-      {selectedModels && inputAudioUrl && (
-        <Button type="primary" danger onClick={handleChangeVoice}>
-          Change Voice Now
-        </Button>
-      )}
-      {outputAudioUrl && (
-        <AudioPlayer
-          audioUrl={outputAudioUrl}
-          fileName={inputFileName || "win.mp3"}
-          tagLabel={"Change Audio"}
-        />
-      )} */}
     </>
   );
 }

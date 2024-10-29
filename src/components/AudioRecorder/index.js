@@ -44,9 +44,7 @@ const AudioRecorder = ({ onRecordComplete }) => {
     );
 
     rec.on("record-end", (blob) => {
-      const recordedUrl = URL.createObjectURL(blob);
-      const fileName = "recording.wav";
-      onRecordComplete(recordedUrl, fileName, 'record');
+      onRecordComplete(blob, "record.wav", "record");
     });
 
     rec.on("record-progress", (time) => {
@@ -90,7 +88,14 @@ const AudioRecorder = ({ onRecordComplete }) => {
     });
   }, []);
   return (
-    <Card style={{ width: 500, margin: "0 auto", textAlign: "center" }}>
+    <Card
+      style={{
+        width: "100%",
+        height: "100%",
+        margin: "0 auto",
+        textAlign: "center",
+      }}
+    >
       <Title level={3}>Audio Recorder</Title>
       <Space direction="vertical" style={{ width: "100%" }}>
         <Button ref={recButtonRef} type="primary" onClick={handleRecord}>
@@ -119,7 +124,6 @@ const AudioRecorder = ({ onRecordComplete }) => {
             border: "1px solid #ddd",
             borderRadius: "4px",
             marginTop: "1rem",
-            display: "none",
           }}
         ></div>
         <div ref={containerRecordingsRef} style={{ margin: "1rem 0" }}></div>

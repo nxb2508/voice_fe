@@ -1,6 +1,9 @@
 import { API_DOMAIN } from "../constants/variables";
 
 export const changeVoiceWithSelectedModel = async ({ options }) => {
+
+  console.log(API_DOMAIN);
+
   const formData = new FormData();
   console.log("options", options);
 
