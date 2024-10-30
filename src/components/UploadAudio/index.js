@@ -4,7 +4,7 @@ import { UploadOutlined } from "@ant-design/icons";
 import "./UploadAudio.scss";
 const UploadAudio = ({ onUpload }) => {
   const [loading, setLoading] = useState(false);
-  const allowedFormats = ["audio/mp3", "audio/mpeg", "audio/wav"];
+  const allowedFormats = ["audio/mp3", "audio/mpeg", "audio/wav", "audio/m4a"];
   const handleUpload = useCallback(
     (file) => {
       const fileName = file.name;
