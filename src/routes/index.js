@@ -3,6 +3,7 @@ import LayoutDefault from "../components/Layouts/LayoutDefault";
 import AudioRecorder from "../components/AudioRecorder";
 import VoiceChanger from "../pages/VoiceChanger";
 import TextToSpeech from "../pages/TextToSpeech";
+import VoiceType from "../pages/VoiceType";
 export const routes = [
   // Public
   {
@@ -24,6 +25,10 @@ export const routes = [
       {
         path: "recorder",
         element: <AudioRecorder />,
+      },
+      {
+        path: "voice-type",
+        element: <VoiceType />,
       },
       {
         path: "*",
