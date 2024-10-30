@@ -4,6 +4,8 @@ import { useCallback, useState } from "react";
 import AudioPlayer from "../../components/AudioPlayer";
 import { DeleteOutlined } from "@ant-design/icons";
 import TypeList from "../../components/TypeList";
+import { FFmpeg } from "@ffmpeg/ffmpeg";
+import { fetchFile } from "@ffmpeg/util";
 function base64ToBlob(base64, mimeType) {
   const byteString = atob(base64.split(",")[1]);
   const ab = new ArrayBuffer(byteString.length);
@@ -15,6 +17,7 @@ function base64ToBlob(base64, mimeType) {
 
   return new Blob([ab], { type: mimeType });
 }
+const ffmpeg = new FFmpeg();
 function VoiceType() {
   const [inputAudioBlob, setInputAudioBlob] = useState(null);
   const [inputAudioUrl, setInputAudioUrl] = useState("");
@@ -32,21 +35,72 @@ function VoiceType() {
   const handleSelectType = useCallback((id) => {
     setSelectedType(id);
   }, []);
-  const handleChangeVoice = () => {
+  const loadFFmpeg = async () => {
+    if (!ffmpeg.loaded) {
+      await ffmpeg.load();
+    }
+  };
+
+  const processAudio = async () => {
     setLoading(true);
+    await loadFFmpeg();
+    // Tải file âm thanh vào bộ nhớ FFmpeg
+    ffmpeg.writeFile("input.wav", await fetchFile(inputAudioUrl));
+
     switch (selectedType) {
       case 1:
-        setOutputAudioUrl('');
+        // Giọng robot
+        await ffmpeg.exec([
+          "-i",
+          "input.wav",
+          "-af",
+          "asetrate=43000, atempo=1.0, apulsator=mode=sine:hz=3:width=0.1:offset_r=0, aecho=0.8:0.88:60:0.4",
+          "output_robot.wav",
+        ]);
         break;
       case 2:
+        // Giọng kid
+        await ffmpeg.exec([
+          "-i",
+          "input.wav",
+          "-af",
+          "asetrate=48000*1.6, atempo=0.85",
+          "output_robot.wav",
+        ]);
         break;
       case 3:
+        // Giọng nam
+        await ffmpeg.exec([
+          "-i",
+          "input.wav",
+          "-af",
+          "aecho=0.8:0.88:20:0.5, asetrate=44100*0.8, atempo=1.25, acrusher=8:0.5",
+          "output_robot.wav",
+        ]);
         break;
       case 4:
+        // Giọng nữ
+        await ffmpeg.exec([
+          "-i",
+          "input.wav",
+          "-af",
+          "asetrate=44100*1.4, atempo=0.8",
+          "output_robot.wav",
+        ]);
         break;
       default:
         break;
     }
+
+    // Lấy file âm thanh đã xử lý từ bộ nhớ của FFmpeg
+    const data = await ffmpeg.readFile("output_robot.wav");
+
+    // Tạo URL để phát lại âm thanh
+    const url = URL.createObjectURL(
+      new Blob([data.buffer], { type: "audio/wav" })
+    );
+    setOutputAudioUrl(url);
+    setLoading(false);
   };
   return (
     <>
@@ -76,7 +130,7 @@ function VoiceType() {
 
                     <Button
                       type="primary"
-                      onClick={handleChangeVoice}
+                      onClick={processAudio}
                       loading={loading} // Trạng thái loading
                       style={{ width: "100%", backgroundColor: "#D0B4FD" }}
                     >
