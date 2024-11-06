@@ -18,6 +18,38 @@ const types = [
     {
         id: 4,
         name: 'Female'
+    },
+    {
+        id: 5,
+        name: 'Sonic'
+    },
+    {
+        id: 6,
+        name: 'Fast speed'
+    },
+    {
+        id: 7,
+        name: 'Turtle speed'
+    },
+    {
+        id: 8,
+        name: 'Snails speed'
+    },
+    {
+        id: 9,
+        name: 'Library'
+    },
+    {
+        id: 10,
+        name: 'Wardrobe'
+    },
+    {
+        id: 11,
+        name: 'Bathroom'
+    },
+    {
+        id: 12,
+        name: 'Diving voice'
     }
 ];
 

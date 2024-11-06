@@ -88,6 +88,86 @@ function VoiceType() {
           "output_robot.wav",
         ]);
         break;
+      case 5:
+        // Giọng sonic
+        await ffmpeg.exec([
+          "-i",
+          "input.wav",
+          "-af",
+          "asetrate=48000*1.6, atempo=3.0",
+          "output_robot.wav",
+        ]);
+        break;
+      case 6:
+        // Giọng fast speed
+        await ffmpeg.exec([
+          "-i",
+          "input.wav",
+          "-af",
+          "asetrate=44100*1.4, atempo=2.0",
+          "output_robot.wav",
+        ]);
+        break;
+      case 7:
+        // Giọng turtle speed
+        await ffmpeg.exec([
+          "-i",
+          "input.wav",
+          "-af",
+          "asetrate=44100*0.6, atempo=0.7",
+          "output_robot.wav",
+        ]);
+        break;
+      case 8:
+        // Giọng snail speed
+        await ffmpeg.exec([
+          "-i",
+          "input.wav",
+          "-af",
+          "asetrate=44100*0.5, atempo=0.5",
+          "output_robot.wav",
+        ]);
+        break;
+      case 9:
+        // Giọng library
+        await ffmpeg.exec([
+          "-i",
+          "input.wav",
+          "-af",
+          "aecho=0.5:0.5:500:0.1, lowpass=f=2000, volume=1.5",
+          "output_robot.wav",
+        ]);
+        break;
+      case 10:
+        // Giọng wardrobe
+        await ffmpeg.exec([
+          "-i",
+          "input.wav",
+          "-af",
+          "[0:a]lowpass=f=1200, highpass=f=300, volume=2.0",
+          "output_robot.wav",
+        ]);
+        break;
+      case 11:
+        // Giọng bathroom
+        await ffmpeg.exec([
+          "-i",
+          "input.wav",
+          "-af",
+          "anoisesrc=color=white:amplitude=0.02 [noise]; [0:a][noise]amix=inputs=2:duration=first:dropout_transition=2, volume=1.5",
+          "output_robot.wav",
+        ]);
+        break;
+      case 12:
+        // Giọng diving voice
+        await ffmpeg.exec([
+          "-i",
+          "input.wav",
+          "-af",
+          "[0:a]lowpass=f=400, highpass=f=100, atempo=0.9, volume=1.5",
+          "output_robot.wav",
+        ]);
+        break;
       default:
         break;
     }
