@@ -48,7 +48,7 @@ function VoiceType() {
     ffmpeg.writeFile("input.wav", await fetchFile(inputAudioUrl));
 
     switch (selectedType) {
-      case 1:
+      case "ffmpeg_1":
         // Giọng robot
         await ffmpeg.exec([
           "-i",
@@ -58,7 +58,7 @@ function VoiceType() {
           "output_robot.wav",
         ]);
         break;
-      case 2:
+      case "ffmpeg_2":
         // Giọng kid
         await ffmpeg.exec([
           "-i",
@@ -68,7 +68,7 @@ function VoiceType() {
           "output_robot.wav",
         ]);
         break;
-      case 3:
+      case "ffmpeg_3":
         // Giọng nam
         await ffmpeg.exec([
           "-i",
@@ -78,7 +78,7 @@ function VoiceType() {
           "output_robot.wav",
         ]);
         break;
-      case 4:
+      case "ffmpeg_4":
         // Giọng nữ
         await ffmpeg.exec([
           "-i",
@@ -88,7 +88,7 @@ function VoiceType() {
           "output_robot.wav",
         ]);
         break;
-      case 5:
+      case "ffmpeg_5":
         // Giọng sonic
         await ffmpeg.exec([
           "-i",
@@ -98,7 +98,7 @@ function VoiceType() {
           "output_robot.wav",
         ]);
         break;
-      case 6:
+      case "ffmpeg_6":
         // Giọng fast speed
         await ffmpeg.exec([
           "-i",
@@ -108,7 +108,7 @@ function VoiceType() {
           "output_robot.wav",
         ]);
         break;
-      case 7:
+      case "ffmpeg_7":
         // Giọng turtle speed
         await ffmpeg.exec([
           "-i",
@@ -118,7 +118,7 @@ function VoiceType() {
           "output_robot.wav",
         ]);
         break;
-      case 8:
+      case "ffmpeg_8":
         // Giọng snail speed
         await ffmpeg.exec([
           "-i",
@@ -128,7 +128,7 @@ function VoiceType() {
           "output_robot.wav",
         ]);
         break;
-      case 9:
+      case "ffmpeg_9":
         // Giọng library
         await ffmpeg.exec([
           "-i",
@@ -138,7 +138,7 @@ function VoiceType() {
           "output_robot.wav",
         ]);
         break;
-      case 10:
+      case "ffmpeg_10":
         // Giọng wardrobe
         await ffmpeg.exec([
           "-i",
@@ -148,7 +148,7 @@ function VoiceType() {
           "output_robot.wav",
         ]);
         break;
-      case 11:
+      case "ffmpeg_11":
         // Giọng bathroom
         await ffmpeg.exec([
           "-i",
@@ -158,7 +158,7 @@ function VoiceType() {
           "output_robot.wav",
         ]);
         break;
-      case 12:
+      case "ffmpeg_12":
         // Giọng diving voice
         await ffmpeg.exec([
           "-i",
