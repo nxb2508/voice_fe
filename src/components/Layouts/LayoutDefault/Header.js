@@ -19,6 +19,9 @@ function Header() {
         <NavLink className="nav-header" to="/voice-type">
           {"Voice Type"}
         </NavLink>
+        <NavLink className="nav-header" to="/train-model">
+          {"Create Model"}
+        </NavLink>
       </div>
     </header>
   );
