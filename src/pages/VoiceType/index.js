@@ -48,7 +48,7 @@ function VoiceType() {
     ffmpeg.writeFile("input.wav", await fetchFile(inputAudioUrl));
 
     switch (selectedType) {
-      case 1:
+      case "ffmpeg_1":
         // Giọng robot
         await ffmpeg.exec([
           "-i",
@@ -58,7 +58,7 @@ function VoiceType() {
           "output_robot.wav",
         ]);
         break;
-      case 2:
+      case "ffmpeg_2":
         // Giọng kid
         await ffmpeg.exec([
           "-i",
@@ -68,7 +68,7 @@ function VoiceType() {
           "output_robot.wav",
         ]);
         break;
-      case 3:
+      case "ffmpeg_3":
         // Giọng nam
         await ffmpeg.exec([
           "-i",
@@ -78,13 +78,93 @@ function VoiceType() {
           "output_robot.wav",
         ]);
         break;
-      case 4:
+      case "ffmpeg_4":
         // Giọng nữ
         await ffmpeg.exec([
           "-i",
           "input.wav",
           "-af",
           "asetrate=44100*1.4, atempo=0.8",
+          "output_robot.wav",
+        ]);
+        break;
+      case "ffmpeg_5":
+        // Giọng sonic
+        await ffmpeg.exec([
+          "-i",
+          "input.wav",
+          "-af",
+          "asetrate=48000*1.6, atempo=3.0",
+          "output_robot.wav",
+        ]);
+        break;
+      case "ffmpeg_6":
+        // Giọng fast speed
+        await ffmpeg.exec([
+          "-i",
+          "input.wav",
+          "-af",
+          "asetrate=44100*1.4, atempo=2.0",
+          "output_robot.wav",
+        ]);
+        break;
+      case "ffmpeg_7":
+        // Giọng turtle speed
+        await ffmpeg.exec([
+          "-i",
+          "input.wav",
+          "-af",
+          "asetrate=44100*0.6, atempo=0.7",
+          "output_robot.wav",
+        ]);
+        break;
+      case "ffmpeg_8":
+        // Giọng snail speed
+        await ffmpeg.exec([
+          "-i",
+          "input.wav",
+          "-af",
+          "asetrate=44100*0.5, atempo=0.5",
+          "output_robot.wav",
+        ]);
+        break;
+      case "ffmpeg_9":
+        // Giọng library
+        await ffmpeg.exec([
+          "-i",
+          "input.wav",
+          "-af",
+          "aecho=0.5:0.5:500:0.1, lowpass=f=2000, volume=1.5",
+          "output_robot.wav",
+        ]);
+        break;
+      case "ffmpeg_10":
+        // Giọng wardrobe
+        await ffmpeg.exec([
+          "-i",
+          "input.wav",
+          "-af",
+          "[0:a]lowpass=f=1200, highpass=f=300, volume=2.0",
+          "output_robot.wav",
+        ]);
+        break;
+      case "ffmpeg_11":
+        // Giọng bathroom
+        await ffmpeg.exec([
+          "-i",
+          "input.wav",
+          "-af",
+          "anoisesrc=color=white:amplitude=0.02 [noise]; [0:a][noise]amix=inputs=2:duration=first:dropout_transition=2, volume=1.5",
+          "output_robot.wav",
+        ]);
+        break;
+      case "ffmpeg_12":
+        // Giọng diving voice
+        await ffmpeg.exec([
+          "-i",
+          "input.wav",
+          "-af",
+          "[0:a]lowpass=f=400, highpass=f=100, atempo=0.9, volume=1.5",
           "output_robot.wav",
         ]);
         break;
