@@ -27,10 +27,10 @@ export const routes = [
         path: "recorder",
         element: <AudioRecorder />,
       },
-      {
-        path: "voice-type",
-        element: <VoiceType />,
-      },
+      // {
+      //   path: "voice-type",
+      //   element: <VoiceType />,
+      // },
       {
         path: "train-model",
         element: <TrainModel />,
