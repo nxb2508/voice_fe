@@ -101,7 +101,7 @@ function ModelList({ onSelectModel, clearSelectedModel }) {
             acc[model.category].push(model);
             return acc;
           }, {});
-          setData([groupedByCategory]);
+          setData(groupedByCategory);
         }
       } catch (error) {
         message.error("Failed to load models. Please try again later."); // Hiển thị thông báo lỗi
