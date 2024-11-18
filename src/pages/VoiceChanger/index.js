@@ -59,7 +59,8 @@ function VoiceChanger() {
   // }, [inputAudioBlob, inputAudioUrl]);
 
   const handleChangeVoice = useCallback(async () => {
-    if (selectedModels.startsWith("ffmpeg")) {
+    console.log(selectedModels);
+    if (selectedModels.toString().startsWith("ffmpeg")) {
       await processAudio();
       return;
     }
