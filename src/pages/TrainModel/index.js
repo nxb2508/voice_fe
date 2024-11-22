@@ -6,6 +6,7 @@ import { trainModel } from "../../services/trainService";
 import { Modal, Tag, Button, Divider, Row, Col, message, Input } from "antd";
 import { useState, useCallback, useEffect } from "react";
 import { DeleteOutlined } from "@ant-design/icons";
+import { useNavigate } from 'react-router-dom';
 import "./TrainModel.scss";
 function base64ToBlob(base64, mimeType) {
   const byteString = atob(base64.split(",")[1]);
@@ -28,6 +29,9 @@ function TrainModel() {
   const [selectedModels, setSelectedModels] = useState(null);
   const [outputAudioUrl, setOutputAudioUrl] = useState("");
   const [loading, setLoading] = useState(false); // Thêm trạng thái loading
+  const [messageTrain, setMessageTrain] = useState("");
+  const [modalTrain, setModalTrain] = useState(false);
+  const navigate = useNavigate();
 
   const handleSelectModel = useCallback((id) => {
     setSelectedModels(id);
@@ -45,6 +49,15 @@ function TrainModel() {
     setInputAudioUrl(URL.createObjectURL(blob));
     setInputFileName(name);
     setInputType(inputType);
+  };
+
+  const handleOk = () => {
+    setModalTrain(false);
+    navigate('/voice-changer');
+  };
+
+  const handleCancel = () => {
+    setModalTrain(false);
   };
 
   useEffect(() => {
@@ -68,7 +81,8 @@ function TrainModel() {
       });
 
       if (result) {
-        console.log("Change voice result:", result);
+        setMessageTrain(result.message);
+        setModalTrain(true);
       } else {
         console.error("Failed to change voice");
         message.error("Failed to change voice. Please try again.");
@@ -93,6 +107,15 @@ function TrainModel() {
         centered // Canh giữa màn hình
       >
         <p>Please wait, the audio is being processed...</p>
+      </Modal>
+      <Modal
+        title="Train Model"
+        open={modalTrain} // Modal hiện khi loading = true
+        centered // Canh giữa màn hình
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <p>{messageTrain}</p>
       </Modal>
       <h1 className="voice-changer__title">Create Your Own Model</h1>
       <div className="voice-changer__container">
@@ -194,12 +217,12 @@ function TrainModel() {
                 justify="space-between"
                 style={{ width: "100%", height: "500px" }}
               >
-                <Col className="gutter-row" span={12}>
+                {/* <Col className="gutter-row" span={12}>
                   <AudioRecorder
                     onRecordComplete={handleChangeAudioBlobInput}
                   />
-                </Col>
-                <Col className="gutter-row" span={12}>
+                </Col> */}
+                <Col className="gutter-row" span={24}>
                   <UploadAudio
                     onUpload={handleChangeAudioUrlInput}
                     style={{ height: "100%" }}

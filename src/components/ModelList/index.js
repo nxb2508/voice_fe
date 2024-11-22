@@ -128,36 +128,38 @@ function ModelList({ onSelectModel, clearSelectedModel }) {
 
   return (
     <>
-      <h2 style={{ color: "#FFF" }}>Select voice type</h2>
-      <Divider
-        style={{
-          borderColor: "rgba(158,154,154,.2)",
-        }}
-      />
-      <Row gutter={[16, 24]}>
-        <>
-          {Object.entries(data).map(([category, models]) => (
-            <React.Fragment key={category}>
-              <Col span={24}>
-                <p style={{ color: "#FFF" }}>{category}</p>
-              </Col>
-              {models.map((model) => (
-                <Col span={12} key={model.id_model}>
-                  <button
-                    onClick={() => handleSelectModel(model.id_model)}
-                    className={
-                      "btn__choose-models " +
-                      (selectedModels === model.id_model ? "selected" : "")
-                    }
-                  >
-                    <div>{model.model_name}</div>
-                  </button>
+      <div className="model-list">
+        <h2 style={{ color: "#FFF" }}>Select voice type</h2>
+        <Divider
+          style={{
+            borderColor: "rgba(158,154,154,.2)",
+          }}
+        />
+        <Row gutter={[16, 24]}>
+          <>
+            {Object.entries(data).map(([category, models]) => (
+              <React.Fragment key={category}>
+                <Col span={24}>
+                  <p style={{ color: "#FFF" }}>{category}</p>
                 </Col>
-              ))}
-            </React.Fragment>
-          ))}
-        </>
-      </Row>
+                {models.map((model) => (
+                  <Col span={12} key={model.id_model}>
+                    <button
+                      onClick={() => handleSelectModel(model.id_model)}
+                      className={
+                        "btn__choose-models " +
+                        (selectedModels === model.id_model ? "selected" : "")
+                      }
+                    >
+                      <div>{model.model_name}</div>
+                    </button>
+                  </Col>
+                ))}
+              </React.Fragment>
+            ))}
+          </>
+        </Row>
+      </div>
     </>
   );
 }
