@@ -3,6 +3,7 @@ import WaveSurfer from "wavesurfer.js";
 import RecordPlugin from "wavesurfer.js/dist/plugins/record.esm.js";
 import { Button, Select, Card, Typography, Space } from "antd";
 import { saveAs } from "file-saver";
+import "./AudioRecorder.scss";
 const { Option } = Select;
 const { Title, Text } = Typography;
 function blobToBase64(blob) {
@@ -94,11 +95,19 @@ const AudioRecorder = ({ onRecordComplete }) => {
         height: "100%",
         margin: "0 auto",
         textAlign: "center",
+        background: "#1e1d24",
       }}
     >
-      <Title level={3}>Audio Recorder</Title>
+      <Title level={3} className="audio-recorder__title">
+        Audio Recorder
+      </Title>
       <Space direction="vertical" style={{ width: "100%" }}>
-        <Button ref={recButtonRef} type="primary" onClick={handleRecord}>
+        <Button
+          ref={recButtonRef}
+          type="primary"
+          onClick={handleRecord}
+          className="audio-recorder__btn-record"
+        >
           {record && record.isRecording() ? "Stop Recording" : "Record"}
         </Button>
 
@@ -115,7 +124,7 @@ const AudioRecorder = ({ onRecordComplete }) => {
           ))}
         </Select>
 
-        <Text strong>{progress}</Text>
+        <Text strong className="audio-recorder__txt-progress">{progress}</Text>
 
         <div
           id="mic"
@@ -124,6 +133,7 @@ const AudioRecorder = ({ onRecordComplete }) => {
             border: "1px solid #ddd",
             borderRadius: "4px",
             marginTop: "1rem",
+            backgroundColor: "#F5F5F5",
           }}
         ></div>
         <div ref={containerRecordingsRef} style={{ margin: "1rem 0" }}></div>

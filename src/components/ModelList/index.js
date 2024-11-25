@@ -84,7 +84,7 @@ let groupedByCategory = effects.reduce((acc, model) => {
   return acc;
 }, {});
 
-function ModelList({ onSelectModel, clearSelectedModel }) {
+function ModelList({ onSelectModel, clearSelectedModel, filter }) {
   const [data, setData] = useState(groupedByCategory);
   const [selectedModels, setSelectedModels] = useState(null);
 
@@ -93,7 +93,12 @@ function ModelList({ onSelectModel, clearSelectedModel }) {
       try {
         const response = await getListModel();
         if (response) {
-          let temp = [...effects, ...response];
+          let temp = [];
+          if (filter == "t2s"){
+            temp = [...response];
+          } else {
+            temp = [...effects, ...response];
+          }
           groupedByCategory = temp.reduce((acc, model) => {
             if (!acc[model.category]) {
               acc[model.category] = [];
@@ -128,38 +133,36 @@ function ModelList({ onSelectModel, clearSelectedModel }) {
 
   return (
     <>
-      <div className="model-list">
-        <h2 style={{ color: "#FFF" }}>Select voice type</h2>
-        <Divider
-          style={{
-            borderColor: "rgba(158,154,154,.2)",
-          }}
-        />
-        <Row gutter={[16, 24]}>
-          <>
-            {Object.entries(data).map(([category, models]) => (
-              <React.Fragment key={category}>
-                <Col span={24}>
-                  <p style={{ color: "#FFF" }}>{category}</p>
+      <h2 style={{ color: "#FFF" }}>Select voice type</h2>
+      <Divider
+        style={{
+          borderColor: "rgba(158,154,154,.2)",
+        }}
+      />
+      <Row gutter={[16, 24]}>
+        <>
+          {Object.entries(data).map(([category, models]) => (
+            <React.Fragment key={category}>
+              <Col span={24}>
+                <p style={{ color: "#FFF" }}>{category}</p>
+              </Col>
+              {models.map((model) => (
+                <Col span={12} key={model.id_model}>
+                  <button
+                    onClick={() => handleSelectModel(model.id_model)}
+                    className={
+                      "btn__choose-models " +
+                      (selectedModels === model.id_model ? "selected" : "")
+                    }
+                  >
+                    <div>{model.model_name}</div>
+                  </button>
                 </Col>
-                {models.map((model) => (
-                  <Col span={12} key={model.id_model}>
-                    <button
-                      onClick={() => handleSelectModel(model.id_model)}
-                      className={
-                        "btn__choose-models " +
-                        (selectedModels === model.id_model ? "selected" : "")
-                      }
-                    >
-                      <div>{model.model_name}</div>
-                    </button>
-                  </Col>
-                ))}
-              </React.Fragment>
-            ))}
-          </>
-        </Row>
-      </div>
+              ))}
+            </React.Fragment>
+          ))}
+        </>
+      </Row>
     </>
   );
 }

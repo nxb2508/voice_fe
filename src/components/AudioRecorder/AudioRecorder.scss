@@ -1,0 +1,19 @@
+.audio-recorder {
+  &__title {
+    text-align: center;
+    background: linear-gradient(90deg, #a2fffd 0%, #fb71fe 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 24px;
+  }
+
+  &__btn-record {
+    color: #000;
+    background: #fff;
+  }
+
+  &__txt-progress{
+    color: #FFF;
+    font-size: 18px;
+  }
+}

@@ -35,7 +35,8 @@ function shortenFileName(fileName, maxLength) {
   const charsToShow = maxLength - extension.length - 3;
 
   // Rút gọn tên file và thêm dấu "..."
-  const shortenedName = nameWithoutExt.substring(0, charsToShow) + "..." + extension;
+  const shortenedName =
+    nameWithoutExt.substring(0, charsToShow) + "..." + extension;
 
   return shortenedName;
 }
@@ -118,10 +119,13 @@ function TextToSpeech() {
       <div className="text-to-speech__container">
         <div className="text-to-speech__content">
           <div className="text-to-speech__models">
-            <ModelList
-              onSelectModel={handleSelectModel}
-              clearSelectedModel={clearSelected}
-            />
+            <div className="model-list">
+              <ModelList
+                onSelectModel={handleSelectModel}
+                clearSelectedModel={clearSelected}
+                filter={"t2s"}
+              />
+            </div>
             {selectedModels && (inputFile || inputText) && (
               <>
                 <Divider
@@ -161,9 +165,7 @@ function TextToSpeech() {
                       </Button>
                     </Upload>
                   ) : (
-                    <Tag                    >
-                      {shortenFileName(inputFile.name, 50)}
-                    </Tag>
+                    <Tag>{shortenFileName(inputFile.name, 50)}</Tag>
                   ))}
               </div>
               <Button

@@ -247,7 +247,9 @@ function VoiceChanger() {
           {inputAudioUrl || inputAudioBlob ? (
             <>
               <div className="voice-changer__models">
-                <ModelList onSelectModel={handleSelectModel} />
+                <div className="model-list">
+                  <ModelList onSelectModel={handleSelectModel} filter={"voice-changer"} />
+                </div>
                 {selectedModels && (
                   <>
                     <Divider
