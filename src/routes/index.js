@@ -5,8 +5,8 @@ import VoiceChanger from "../pages/VoiceChanger";
 import TextToSpeech from "../pages/TextToSpeech";
 import VoiceType from "../pages/VoiceType";
 import TrainModel from "../pages/TrainModel";
+import PrivateRoutes from "../components/PrivateRoutes";
 export const routes = [
-  // Public
   {
     path: "/",
     element: <LayoutDefault />,
@@ -27,19 +27,19 @@ export const routes = [
         path: "recorder",
         element: <AudioRecorder />,
       },
-      // {
-      //   path: "voice-type",
-      //   element: <VoiceType />,
-      // },
-      {
-        path: "train-model",
-        element: <TrainModel />,
-      },
       {
         path: "*",
         element: <Navigate to="/" />,
       },
+      {
+        element: <PrivateRoutes />,
+        children: [
+          {
+            path: "train-model",
+            element: <TrainModel />,
+          },
+        ]
+      }
     ],
   },
-  // End Public
 ];
