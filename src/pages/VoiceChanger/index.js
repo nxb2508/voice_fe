@@ -3,7 +3,7 @@ import AudioRecorder from "../../components/AudioRecorder";
 import UploadAudio from "../../components/UploadAudio";
 import ModelList from "../../components/ModelList";
 import { changeVoiceWithSelectedModel } from "../../services/audioService";
-import { Modal, Tag, Button, Divider, Row, Col, message } from "antd";
+import { Modal, Tag, Button, Divider, Row, Col, Slider, message } from "antd";
 import { useState, useCallback, useEffect } from "react";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile } from "@ffmpeg/util";
@@ -30,6 +30,9 @@ function VoiceChanger() {
   const [selectedModels, setSelectedModels] = useState(null);
   const [outputAudioUrl, setOutputAudioUrl] = useState("");
   const [loading, setLoading] = useState(false); // Thêm trạng thái loading
+  const [inputSpeed, setInputSpeed] = useState(1);
+  const [inputVolume, setInputVolume] = useState(1);
+  const [outputAudioEditedUrl, setOutputAudioEditedUrl] = useState("");
 
   const handleSelectModel = useCallback((id) => {
     setSelectedModels(id);
@@ -230,6 +233,49 @@ function VoiceChanger() {
     setOutputAudioUrl(url);
     setLoading(false);
   };
+
+  const onChangeSpeed = (newValue) => {
+    setInputSpeed(newValue);
+  };
+
+  const onChangeVolume = (newValue) => {
+    setInputVolume(newValue);
+  };
+
+  const editAudio = async () => {
+    setLoading(true);
+    await loadFFmpeg();
+    try {
+      const audioData = await fetchFile(outputAudioUrl);
+    } catch (error) {
+      console.error("Error during voice change:", error);
+    }
+    // Tải file âm thanh vào bộ nhớ FFmpeg
+    ffmpeg.writeFile("input_edit.wav", await fetchFile(outputAudioUrl));
+    console.log("ok");
+    var changeTxt = "volume=" + inputVolume + ", atempo=" + inputSpeed;
+    console.log(changeTxt);
+    await ffmpeg.exec([
+      "-i",
+      "input_edit.wav",
+      "-af",
+      changeTxt,
+      "output_edited.wav",
+    ]);
+    console.log("ok2");
+
+    // Lấy file âm thanh đã xử lý từ bộ nhớ của FFmpeg
+    const data = await ffmpeg.readFile("output_edited.wav");
+    console.log("ok3");
+
+    // Tạo URL để phát lại âm thanh
+    const url = URL.createObjectURL(
+      new Blob([data.buffer], { type: "audio/wav" })
+    );
+    setOutputAudioEditedUrl(url);
+    setLoading(false);
+  };
+
   return (
     <>
       <Modal
@@ -248,7 +294,10 @@ function VoiceChanger() {
             <>
               <div className="voice-changer__models">
                 <div className="model-list">
-                  <ModelList onSelectModel={handleSelectModel} filter={"voice-changer"} />
+                  <ModelList
+                    onSelectModel={handleSelectModel}
+                    filter={"voice-changer"}
+                  />
                 </div>
                 {selectedModels && (
                   <>
@@ -303,21 +352,94 @@ function VoiceChanger() {
                     tagLabel={"Original Audio"}
                   />
                 </div>
-                <div className="audio__output">
-                  <h2 style={{ color: "#FFF" }}>Output</h2>
-                  <Divider
-                    style={{
-                      borderColor: "rgba(158,154,154,.2)",
-                    }}
-                  />
-                  {outputAudioUrl && (
-                    <AudioPlayer
-                      audioUrl={outputAudioUrl}
-                      fileName={"converted-" + inputFileName}
-                      tagLabel={"Change Audio"}
-                    />
-                  )}
-                </div>
+                {outputAudioUrl && (
+                  <>
+                    <div className="audio__output">
+                      <h2 style={{ color: "#FFF" }}>Output</h2>
+                      {/* Speed */}
+                      <div className="form-edit-audio">
+                        <div className="speed">
+                          <Tag className="speed__title" color="#108ee9">
+                            Speed: {inputSpeed}
+                          </Tag>
+                          <Slider
+                            className="speed__slider"
+                            min={0.5}
+                            max={2}
+                            step={0.1}
+                            defaultValue={1}
+                            onChange={onChangeSpeed}
+                            styles={{
+                              track: {
+                                background: "rgb(125, 78, 217)",
+                              },
+                              rail: {
+                                background: "#f5f5f5",
+                              },
+                            }}
+                            // onChangeComplete={onChangeSpeedComplete}
+                          />
+                        </div>
+                        <div className="volume">
+                          <Tag className="volume__title" color="#108ee9">
+                            Volume: {inputVolume}
+                          </Tag>
+                          <Slider
+                            className="volume__slider"
+                            min={0.5}
+                            max={5}
+                            step={0.5}
+                            defaultValue={1}
+                            onChange={onChangeVolume}
+                            styles={{
+                              track: {
+                                background: "rgb(125, 78, 217)",
+                              },
+                              rail: {
+                                background: "#f5f5f5",
+                              },
+                            }}
+                            // onChangeComplete={onChangeSpeedComplete}
+                          />
+                        </div>
+                        <Button
+                          type="primary"
+                          onClick={editAudio}
+                          loading={loading} // Trạng thái loading
+                          style={{ width: "20%", backgroundColor: "#D0B4FD" }}
+                        >
+                          Edit
+                        </Button>
+                      </div>
+
+                      {/* End Speed */}
+                      <Divider
+                        style={{
+                          borderColor: "rgba(158,154,154,.2)",
+                        }}
+                      />
+                      {outputAudioUrl && (
+                        <AudioPlayer
+                          audioUrl={outputAudioUrl}
+                          fileName={"converted-" + inputFileName}
+                          tagLabel={"Change Audio"}
+                        />
+                      )}
+                      <Divider
+                        style={{
+                          borderColor: "rgba(158,154,154,.2)",
+                        }}
+                      />
+                      {outputAudioEditedUrl && (
+                        <AudioPlayer
+                          audioUrl={outputAudioEditedUrl}
+                          fileName={"edited-" + inputFileName}
+                          tagLabel={"Edit Audio"}
+                        />
+                      )}
+                    </div>
+                  </>
+                )}
               </div>
             </>
           ) : (
