@@ -31,7 +31,7 @@ function Header() {
 
       const idToken = await user.getIdToken();
 
-      const response = await fetch('http://localhost:4000/verify-token', {
+      const response = await fetch('http://localhost:4000/api/auth/verify-token', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -40,10 +40,12 @@ function Header() {
       });
 
       const data = await response.json();
-      setCookie("token", data.token, 1)
-      setToken(data.token)
-
-      alert(`Welcome, ${user.displayName}!`);
+      
+      if(data) {
+        setCookie("token", data.token, 1)
+        setToken(data.token)
+        alert(`Welcome, ${user.displayName}!`);
+      }
     } catch (error) {
       alert('Failed to sign in with Google');
     }
