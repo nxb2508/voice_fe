@@ -1,6 +1,10 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { getListModel, getModelDetail } from "../../services/modelService";
+import {
+  getListModel,
+  getModelDetail,
+  getMyModels,
+} from "../../services/modelService";
 import {
   Card,
   Checkbox,
@@ -12,6 +16,7 @@ import {
   message,
 } from "antd";
 import "./ModelList.scss";
+import { getCookie } from "../../helper/cookie";
 
 const effects = [
   {
@@ -92,9 +97,10 @@ function ModelList({ onSelectModel, clearSelectedModel, filter }) {
     const fetchApi = async () => {
       try {
         const response = await getListModel();
+        let result;
         if (response) {
           let temp = [];
-          if (filter == "t2s"){
+          if (filter == "t2s") {
             temp = [...response];
           } else {
             temp = [...effects, ...response];
@@ -106,8 +112,26 @@ function ModelList({ onSelectModel, clearSelectedModel, filter }) {
             acc[model.category].push(model);
             return acc;
           }, {});
-          setData(groupedByCategory);
+          result = groupedByCategory;
         }
+        const token = getCookie("token");
+        if (token) {
+          const response = await getMyModels();
+          if (response) {
+            groupedByCategory = response.reduce((acc, model) => {
+              if (!acc[model.category]) {
+                acc[model.category] = [];
+              }
+              acc[model.category].push(model);
+              return acc;
+            }, {});
+            result = {
+              ...result,
+              ...groupedByCategory,
+            };
+          }
+        }
+        setData(result)
       } catch (error) {
         message.error("Failed to load models. Please try again later."); // Hiển thị thông báo lỗi
         console.error("Error fetching models:", error);
