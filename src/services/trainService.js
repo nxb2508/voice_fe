@@ -17,7 +17,7 @@ export const trainModel = async ({ options }) => {
 
   try {
     // Fetch request to API
-    const response = await fetch("http://localhost:4000/api/models/train", {
+    const response = await fetch("https://voice-be-amber.vercel.app/api/models/train", {
       method: "POST",
       headers: new Headers({
         Authorization: `Bearer ${getCookie("token")}`,
