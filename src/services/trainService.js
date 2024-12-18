@@ -1,4 +1,5 @@
 import { API_DOMAIN } from "../constants/variables";
+import { getCookie } from "../helper/cookie";
 
 export const trainModel = async ({ options }) => {
 
@@ -16,9 +17,10 @@ export const trainModel = async ({ options }) => {
 
   try {
     // Fetch request to API
-    const response = await fetch(API_DOMAIN + "train-model/", {
+    const response = await fetch("https://voice-be-amber.vercel.app/api/models/train", {
       method: "POST",
       headers: new Headers({
+        Authorization: `Bearer ${getCookie("token")}`,
         "ngrok-skip-browser-warning": "69420",
       }),
       body: formData,
@@ -31,7 +33,7 @@ export const trainModel = async ({ options }) => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const data = await response.json(); // Parse the JSON response
+    const data = await response.json();
 
     return data;
   } catch (error) {

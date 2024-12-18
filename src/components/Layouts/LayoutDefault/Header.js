@@ -31,7 +31,7 @@ function Header() {
 
       const idToken = await user.getIdToken();
 
-      const response = await fetch('http://localhost:4000/api/auth/verify-token', {
+      const response = await fetch('https://voice-be-amber.vercel.app/api/auth/verify-token', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
