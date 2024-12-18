@@ -1,4 +1,4 @@
-let API_DOMAIN = localStorage.getItem("API_DOMAIN") || "http://localhost:8000/";
+let API_DOMAIN = localStorage.getItem("API_DOMAIN") || "http://14.224.131.219:8400/";
 
 export const getApiDomain = () => API_DOMAIN;
 
