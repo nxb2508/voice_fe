@@ -1,3 +1,9 @@
+- Cài đặt npm
+- Chạy terminal npm i để tải các thư viện
+- Đổi tên file tạo file .env cùng cấp với package.json
+- Liên hệ admin để lấy dữ liệu file .env
+- Để chạy project npm start
+**************************
 - Tải npm trước
 - Fork project về account mình
 - Clone project vừa fork về
