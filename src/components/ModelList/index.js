@@ -18,79 +18,8 @@ import {
 import "./ModelList.scss";
 import { getCookie } from "../../helper/cookie";
 
-const effects = [
-  {
-    id_model: "ffmpeg_1",
-    model_name: "Robot",
-    category: "base",
-  },
-  {
-    id_model: "ffmpeg_2",
-    model_name: "Kid",
-    category: "base",
-  },
-  {
-    id_model: "ffmpeg_3",
-    model_name: "Male",
-    category: "base",
-  },
-  {
-    id_model: "ffmpeg_4",
-    model_name: "Female",
-    category: "base",
-  },
-  {
-    id_model: "ffmpeg_5",
-    model_name: "Sonic",
-    category: "speed",
-  },
-  {
-    id_model: "ffmpeg_6",
-    model_name: "Fast speed",
-    category: "speed",
-  },
-  {
-    id_model: "ffmpeg_7",
-    model_name: "Turtle speed",
-    category: "speed",
-  },
-  {
-    id_model: "ffmpeg_8",
-    model_name: "Snails speed",
-    category: "speed",
-  },
-  {
-    id_model: "ffmpeg_9",
-    model_name: "Library",
-    category: "ambient",
-  },
-  {
-    id_model: "ffmpeg_10",
-    model_name: "Wardrobe",
-    category: "ambient",
-  },
-  {
-    id_model: "ffmpeg_11",
-    model_name: "Bathroom",
-    category: "ambient",
-  },
-  {
-    id_model: "ffmpeg_12",
-    model_name: "Diving voice",
-    category: "ambient",
-  },
-];
-
-let groupedByCategory = effects.reduce((acc, model) => {
-  if (!acc[model.category]) {
-    acc[model.category] = [];
-  }
-  acc[model.category].push(model);
-  return acc;
-}, {});
-
 function ModelList({ onSelectModel, clearSelectedModel, filter }) {
-  const [data, setData] = useState(groupedByCategory);
+  const [data, setData] = useState({});
   const [selectedModels, setSelectedModels] = useState(null);
 
   useEffect(() => {
@@ -99,39 +28,37 @@ function ModelList({ onSelectModel, clearSelectedModel, filter }) {
         const response = await getListModel();
         let result;
         if (response) {
-          let temp = [];
-          if (filter == "t2s") {
-            temp = [...response];
-          } else {
-            temp = [...effects, ...response];
-          }
-          groupedByCategory = temp.reduce((acc, model) => {
+          result = response.reduce((acc, model) => {
             if (!acc[model.category]) {
               acc[model.category] = [];
             }
             acc[model.category].push(model);
             return acc;
           }, {});
-          result = groupedByCategory;
         }
         const token = getCookie("token");
         if (token) {
           const response = await getMyModels();
+          console.log(response);
           if (response) {
-            groupedByCategory = response.reduce((acc, model) => {
+            const temp = response.reduce((acc, model) => {
               if (!acc[model.category]) {
                 acc[model.category] = [];
               }
               acc[model.category].push(model);
               return acc;
             }, {});
-            result = {
-              ...result,
-              ...groupedByCategory,
-            };
+            for (let category in temp) {
+              if (result[category]) {
+                result[category] = result[category].concat(temp[category]);
+              } else {
+                result[category] = temp[category];
+              }
+            }
           }
         }
-        setData(result)
+        setData(result);
+        console.log(result);
       } catch (error) {
         message.error("Failed to load models. Please try again later."); // Hiển thị thông báo lỗi
         console.error("Error fetching models:", error);
@@ -140,9 +67,9 @@ function ModelList({ onSelectModel, clearSelectedModel, filter }) {
     fetchApi();
   }, []);
 
-  // useEffect(() => {
-  //   console.log(selectedModels);
-  // }, [selectedModels]);
+  useEffect(() => {
+    console.log(selectedModels);
+  }, [selectedModels]);
 
   useEffect(() => {
     if (clearSelectedModel) {
@@ -173,10 +100,10 @@ function ModelList({ onSelectModel, clearSelectedModel, filter }) {
               {models.map((model) => (
                 <Col span={12} key={model.id_model}>
                   <button
-                    onClick={() => handleSelectModel(model.id_model)}
+                    onClick={() => handleSelectModel(model.id)}
                     className={
                       "btn__choose-models " +
-                      (selectedModels === model.id_model ? "selected" : "")
+                      (selectedModels === model.id ? "selected" : "")
                     }
                   >
                     <div>{model.model_name}</div>

@@ -24,31 +24,17 @@ function TrainModel() {
   const [inputAudioBlob, setInputAudioBlob] = useState(null);
   const [inputAudioUrl, setInputAudioUrl] = useState("");
   const [inputFileName, setInputFileName] = useState("");
-  const [inputType, setInputType] = useState("");
   const [inputNameModel, setInputNameModel] = useState("");
-  const [selectedModels, setSelectedModels] = useState(null);
-  const [outputAudioUrl, setOutputAudioUrl] = useState("");
   const [loading, setLoading] = useState(false); // Thêm trạng thái loading
   const [messageTrain, setMessageTrain] = useState("");
   const [modalTrain, setModalTrain] = useState(false);
+  const [inputEpochs, setInputEpochs] = useState(0);
   const navigate = useNavigate();
-
-  const handleSelectModel = useCallback((id) => {
-    setSelectedModels(id);
-  }, []); // Không có dependency để đảm bảo chỉ được tạo một lần
 
   const handleChangeAudioUrlInput = (url, name, inputType) => {
     setInputAudioUrl(url);
     setInputAudioBlob(base64ToBlob(url, "audio/wav"));
     setInputFileName(name);
-    setInputType(inputType);
-  };
-
-  const handleChangeAudioBlobInput = (blob, name, inputType) => {
-    setInputAudioBlob(blob);
-    setInputAudioUrl(URL.createObjectURL(blob));
-    setInputFileName(name);
-    setInputType(inputType);
   };
 
   const handleOk = () => {
@@ -68,6 +54,11 @@ function TrainModel() {
     setInputNameModel(e.target.value);
   };
 
+  const handleChangeEpochs = (e) => {
+    setInputEpochs(e.target.value);
+    
+  };
+
   const handleChangeVoice = async () => {
     setLoading(true); // Bật trạng thái loading trước khi gọi API
     try {
@@ -77,6 +68,7 @@ function TrainModel() {
         options: {
           file: inputAudioBlob,
           name: inputNameModel,
+          epochs: inputEpochs,
         },
       });
 
@@ -130,7 +122,7 @@ function TrainModel() {
                         className="voice-changer__input--title"
                         style={{ color: "#FFF" }}
                       >
-                        Name Your Model
+                        Config Your Model
                       </h2>
                     </div>
 
@@ -144,8 +136,18 @@ function TrainModel() {
                       onChange={handleChangeNameModel}
                       style={{ marginBottom: "20px" }}
                     />
+                    <Divider
+                      style={{
+                        borderColor: "rgba(158,154,154,.2)",
+                      }}
+                    />
+                    <Input
+                      placeholder="Enter epochs"
+                      onChange={handleChangeEpochs}
+                      style={{ marginBottom: "20px" }}
+                    />
 
-                    {inputNameModel.length > 0 && (
+                    {(inputNameModel.length > 0 && parseInt(inputEpochs) > 0) && (
                       <Button
                         type="primary"
                         onClick={handleChangeVoice}
@@ -175,8 +177,6 @@ function TrainModel() {
                       setInputAudioBlob(null);
                       setInputAudioUrl("");
                       setInputFileName("");
-                      setSelectedModels(null);
-                      setOutputAudioUrl("");
                       setInputNameModel("");
                     }}
                   ></Button>

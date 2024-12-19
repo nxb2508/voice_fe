@@ -11,6 +11,7 @@ export const trainModel = async ({ options }) => {
   // Append the audio file and model_id to the form data
   formData.append("file", options.file, 'input.wav'); // Ensure "file" is the correct field name
   formData.append("name", options.name);
+  formData.append("epochs", options.epochs);
   formData.append("f0_method", "dio");
 
   console.log("formData", formData);
@@ -20,6 +21,9 @@ export const trainModel = async ({ options }) => {
     const response = await fetch("https://be.dinhmanhhung.net/api/models/train", {
       method: "POST",
       body: formData,
+      headers: new Headers({
+        Authorization: `Bearer ${getCookie("token")}`,
+      }),
     });
 
     // Handle errors in the response
