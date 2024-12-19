@@ -40,7 +40,7 @@ function Header() {
       });
 
       const data = await response.json();
-      
+
       if(data) {
         setCookie("token", data.token, 1)
         setToken(data.token)
@@ -59,9 +59,6 @@ function Header() {
     <header className="layout__header">
       <div className={"layout__logo "}>
         <Link to="/voice-changer">{"Voice Tools"}</Link>
-      </div>
-      <div className="layout__api-setter">
-        <ApiDomainSetter />
       </div>
       <div className="layout__nav">
         <NavLink className="nav-header" to="/voice-changer">
