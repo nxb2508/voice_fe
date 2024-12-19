@@ -6,10 +6,6 @@ export const textToSpeechWithTextPlainInput = async (datas) => {
     // Fetch request to API
     const response = await fetch(API_DOMAIN + "text-to-speech-and-infer/", {
       method: "POST",
-      headers: new Headers({
-        "ngrok-skip-browser-warning": "69420",
-        "Content-Type": "application/json",
-      }),
       body: JSON.stringify(datas),
     });
 
@@ -40,9 +36,6 @@ export const textToSpeechWithFileInput = async (formData) => {
     // Fetch request to API
     const response = await fetch(API_DOMAIN + "text-file-to-speech-and-infer/", {
       method: "POST",
-      headers: new Headers({
-        "ngrok-skip-browser-warning": "69420",
-      }),
       body: formData,
     });
 

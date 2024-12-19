@@ -75,16 +75,18 @@ function TextToSpeech() {
     setLoading(true); // Bật trạng thái loading trước khi gọi API
     try {
       let result = null;
+      const modelId = String(selectedModels);
       if (inputText) {
         result = await textToSpeechWithTextPlainInput({
           text: inputText,
-          model_id: selectedModels,
+          model_id: modelId,
           locate: "vi",
         });
       } else if (inputFile) {
         const formData = new FormData();
         formData.append("file", inputFile);
-        formData.append("model_id", selectedModels);
+        formData.append("model_id", modelId);
+        formData.append("locate", "vi");
         result = await textToSpeechWithFileInput(formData);
       }
 
