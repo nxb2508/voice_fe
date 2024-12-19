@@ -86,7 +86,7 @@ function TextToSpeech() {
         const formData = new FormData();
         formData.append("file", inputFile);
         formData.append("model_id", modelId);
-        formData.append("locate", "vi");
+        formData.append("locate", "en");
         result = await textToSpeechWithFileInput(formData);
       }
 
