@@ -80,7 +80,7 @@ function TextToSpeech() {
         result = await textToSpeechWithTextPlainInput({
           text: inputText,
           model_id: modelId,
-          locate: "vi",
+          locate: "en",
         });
       } else if (inputFile) {
         const formData = new FormData();

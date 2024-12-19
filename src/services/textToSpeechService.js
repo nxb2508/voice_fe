@@ -6,6 +6,9 @@ export const textToSpeechWithTextPlainInput = async (datas) => {
     // Fetch request to API
     const response = await fetch(API_DOMAIN + "text-to-speech-and-infer/", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify(datas),
     });
 
