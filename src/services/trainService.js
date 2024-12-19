@@ -17,12 +17,8 @@ export const trainModel = async ({ options }) => {
 
   try {
     // Fetch request to API
-    const response = await fetch("https://voice-be-amber.vercel.app/api/models/train", {
+    const response = await fetch("https://be.dinhmanhhung.net/api/models/train", {
       method: "POST",
-      headers: new Headers({
-        Authorization: `Bearer ${getCookie("token")}`,
-        "ngrok-skip-browser-warning": "69420",
-      }),
       body: formData,
     });
 

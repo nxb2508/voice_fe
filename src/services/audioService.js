@@ -17,9 +17,6 @@ export const changeVoiceWithSelectedModel = async ({ options }) => {
     // Fetch request to API
     const response = await fetch(API_DOMAIN + "infer-audio/", {
       method: "POST",
-      headers: new Headers({
-        "ngrok-skip-browser-warning": "69420",
-      }),
       body: formData,
     });
 

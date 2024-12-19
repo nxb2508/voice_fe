@@ -1,8 +1,7 @@
 import { getCookie } from "../helper/cookie";
-import { get } from "../utils/request";
 
 export const getListModel = async () => {
-  const response = await fetch("https://voice-be-amber.vercel.app/api/models", {
+  const response = await fetch("https://be.dinhmanhhung.net/api/models", {
     method: "get"
   });
   const result = await response.json();
@@ -10,7 +9,7 @@ export const getListModel = async () => {
 };
 
 export const getMyModels = async () => {
-  const response = await fetch("https://voice-be-amber.vercel.app/api/models/me", {
+  const response = await fetch("https://be.dinhmanhhung.net/api/models/me", {
     method: "get",
     headers: new Headers({
       Authorization: `Bearer ${getCookie("token")}`,
