@@ -7,10 +7,14 @@ import {
   textToSpeechWithFileInput,
   textToSpeechWithTextPlainInput,
 } from "../../services/textToSpeechService";
-import { Modal, Tag, Button, Divider, Row, Col, message } from "antd";
+import { Modal, Tag, Button, Divider, Row, Col, message, Slider } from "antd";
 import { Input, Upload } from "antd";
 import { useState, useCallback, useEffect } from "react";
 import { DeleteOutlined } from "@ant-design/icons";
+import { FFmpeg } from "@ffmpeg/ffmpeg";
+import { fetchFile } from "@ffmpeg/util";
+import * as mammoth from "mammoth";
+
 import "./TextToSpeech.scss";
 
 const { TextArea } = Input;
@@ -41,6 +45,8 @@ function shortenFileName(fileName, maxLength) {
   return shortenedName;
 }
 
+const ffmpeg = new FFmpeg();
+
 function TextToSpeech() {
   const [inputText, setInputText] = useState("");
   const [inputFile, setInputFile] = useState(null);
@@ -48,6 +54,40 @@ function TextToSpeech() {
   const [outputAudioUrl, setOutputAudioUrl] = useState("");
   const [loading, setLoading] = useState(false); // Thêm trạng thái loading
   const [clearSelected, setClearSelected] = useState(false);
+  const [inputSpeed, setInputSpeed] = useState(1);
+  const [inputVolume, setInputVolume] = useState(1);
+  const [outputAudioEditedUrl, setOutputAudioEditedUrl] = useState("");
+  const [inputTextFromFile, setInputTextFromFile] = useState("");
+
+  const loadFFmpeg = async () => {
+    if (!ffmpeg.loaded) {
+      await ffmpeg.load();
+    }
+  };
+
+  useEffect(() => {
+    if (inputFile) {
+      console.log(inputFile.name.split(".").pop());
+      if (inputFile.name.split(".").pop() === "txt") {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          setInputTextFromFile(e.target.result);
+        };
+        reader.readAsText(inputFile);
+      } else if (inputFile.name.split(".").pop() === "docx") {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          const arrayBuffer = e.target.result;
+          const result = await mammoth.extractRawText({ arrayBuffer });
+          setInputTextFromFile(result.value);
+        };
+        reader.readAsArrayBuffer(inputFile);
+      } else {
+        message.error("Chỉ chấp nhận file .txt và .docx!");
+      }
+    }
+  }, [inputFile]);
+
   const handleSelectModel = useCallback((id) => {
     setSelectedModels(id);
   }, []); // Không có dependency để đảm bảo chỉ được tạo một lần
@@ -71,7 +111,7 @@ function TextToSpeech() {
     setTimeout(() => setClearSelected(false), 0);
   };
 
-  const handleChangeVoice = useCallback(async () => {
+  const handleChangeVoice = async () => {
     setLoading(true); // Bật trạng thái loading trước khi gọi API
     try {
       let result = null;
@@ -104,8 +144,48 @@ function TextToSpeech() {
     } finally {
       setLoading(false); // Tắt trạng thái loading sau khi hoàn thành API call
     }
-  }, [selectedModels, inputText, inputFile]);
+  };
+  const onChangeSpeed = (newValue) => {
+    setInputSpeed(newValue);
+  };
 
+  const onChangeVolume = (newValue) => {
+    setInputVolume(newValue);
+  };
+
+  const editAudio = async () => {
+    setLoading(true);
+    await loadFFmpeg();
+    try {
+      const audioData = await fetchFile(outputAudioUrl);
+    } catch (error) {
+      console.error("Error during voice change:", error);
+    }
+    // Tải file âm thanh vào bộ nhớ FFmpeg
+    ffmpeg.writeFile("input_edit.wav", await fetchFile(outputAudioUrl));
+    console.log("ok");
+    var changeTxt = "volume=" + inputVolume + ", atempo=" + inputSpeed;
+    console.log(changeTxt);
+    await ffmpeg.exec([
+      "-i",
+      "input_edit.wav",
+      "-af",
+      changeTxt,
+      "output_edited.wav",
+    ]);
+    console.log("ok2");
+
+    // Lấy file âm thanh đã xử lý từ bộ nhớ của FFmpeg
+    const data = await ffmpeg.readFile("output_edited.wav");
+    console.log("ok3");
+
+    // Tạo URL để phát lại âm thanh
+    const url = URL.createObjectURL(
+      new Blob([data.buffer], { type: "audio/wav" })
+    );
+    setOutputAudioEditedUrl(url);
+    setLoading(false);
+  };
   return (
     <>
       <Modal
@@ -180,18 +260,29 @@ function TextToSpeech() {
                   setInputFile(null);
                   setOutputAudioUrl("");
                   setSelectedModels(null);
+                  setOutputAudioEditedUrl("");
+                  setInputTextFromFile("");
+                  setInputSpeed(1);
+                  setInputVolume(1);
                   handleClearModelSelection();
                 }}
               ></Button>
             </div>
             <div>
-              {!inputFile && (
+              {!inputFile ? (
                 <TextArea
                   value={inputText}
                   placeholder="Puts your text here"
                   autoSize={{ minRows: 2, maxRows: 6 }}
                   size="large"
                   onChange={(e) => setInputText(e.target.value)}
+                />
+              ) : (
+                <TextArea
+                  value={inputTextFromFile}
+                  autoSize={{ minRows: 2, maxRows: 6 }}
+                  size="large"
+                  readOnly
                 />
               )}
             </div>
@@ -200,20 +291,88 @@ function TextToSpeech() {
                 borderColor: "rgba(158,154,154,.2)",
               }}
             />
-            <div className="audio__output">
-              <h2 style={{ color: "#FFF" }}>Output</h2>
-              <Divider
-                style={{
-                  borderColor: "rgba(158,154,154,.2)",
-                }}
-              />
-              {outputAudioUrl && (
-                <AudioPlayer
-                  audioUrl={outputAudioUrl}
-                  fileName={"output.mp3"}
+            {outputAudioUrl && (
+              <div className="audio__output">
+                <h2 style={{ color: "#FFF" }}>Output</h2>
+                <div className="form-edit-audio">
+                  <div className="speed">
+                    <Tag className="speed__title" color="#108ee9">
+                      Speed: {inputSpeed}
+                    </Tag>
+                    <Slider
+                      className="speed__slider"
+                      min={0.5}
+                      max={2}
+                      step={0.1}
+                      defaultValue={1}
+                      onChange={onChangeSpeed}
+                      styles={{
+                        track: {
+                          background: "rgb(125, 78, 217)",
+                        },
+                        rail: {
+                          background: "#f5f5f5",
+                        },
+                      }}
+                      // onChangeComplete={onChangeSpeedComplete}
+                    />
+                  </div>
+                  <div className="volume">
+                    <Tag className="volume__title" color="#108ee9">
+                      Volume: {inputVolume}
+                    </Tag>
+                    <Slider
+                      className="volume__slider"
+                      min={0.5}
+                      max={5}
+                      step={0.5}
+                      defaultValue={1}
+                      onChange={onChangeVolume}
+                      styles={{
+                        track: {
+                          background: "rgb(125, 78, 217)",
+                        },
+                        rail: {
+                          background: "#f5f5f5",
+                        },
+                      }}
+                      // onChangeComplete={onChangeSpeedComplete}
+                    />
+                  </div>
+                  <Button
+                    type="primary"
+                    onClick={editAudio}
+                    loading={loading} // Trạng thái loading
+                    style={{ width: "20%", backgroundColor: "#D0B4FD" }}
+                  >
+                    Edit
+                  </Button>
+                </div>
+                <Divider
+                  style={{
+                    borderColor: "rgba(158,154,154,.2)",
+                  }}
                 />
-              )}
-            </div>
+                {outputAudioUrl && (
+                  <AudioPlayer
+                    audioUrl={outputAudioUrl}
+                    fileName={"output.mp3"}
+                  />
+                )}
+                <Divider
+                  style={{
+                    borderColor: "rgba(158,154,154,.2)",
+                  }}
+                />
+                {outputAudioEditedUrl && (
+                  <AudioPlayer
+                    audioUrl={outputAudioEditedUrl}
+                    fileName={"edited-" + "output.mp3"}
+                    tagLabel={"Edit Audio"}
+                  />
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

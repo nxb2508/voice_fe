@@ -191,6 +191,9 @@ function VoiceChanger() {
                       setInputFileName("");
                       setSelectedModels(null);
                       setOutputAudioUrl("");
+                      setOutputAudioEditedUrl("");
+                      setInputSpeed(1);
+                      setInputVolume(1);
                     }}
                   ></Button>
                 </div>
