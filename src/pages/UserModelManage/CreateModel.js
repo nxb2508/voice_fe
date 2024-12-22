@@ -7,7 +7,8 @@ import { Modal, Tag, Button, Divider, Row, Col, message, Input } from "antd";
 import { useState, useCallback, useEffect } from "react";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useNavigate } from 'react-router-dom';
-import "./TrainModel.scss";
+import "./CreateModel.scss";
+import GoBack from "../../components/GoBack";
 function base64ToBlob(base64, mimeType) {
   const byteString = atob(base64.split(",")[1]);
   const ab = new ArrayBuffer(byteString.length);
@@ -20,7 +21,7 @@ function base64ToBlob(base64, mimeType) {
   return new Blob([ab], { type: mimeType });
 }
 
-function TrainModel() {
+function CreateModel() {
   const [inputAudioBlob, setInputAudioBlob] = useState(null);
   const [inputAudioUrl, setInputAudioUrl] = useState("");
   const [inputFileName, setInputFileName] = useState("");
@@ -91,6 +92,7 @@ function TrainModel() {
 
   return (
     <>
+      <GoBack />
       <Modal
         title="Processing"
         open={loading} // Modal hiện khi loading = true
@@ -237,4 +239,4 @@ function TrainModel() {
   );
 }
 
-export default TrainModel;
+export default CreateModel;

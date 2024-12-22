@@ -1,10 +1,10 @@
-import { API_DOMAIN } from "../constants/variables";
+import { AI_DOMAIN } from "../constants/variables";
 
 export const textToSpeechWithTextPlainInput = async (datas) => {
   try {
     console.log(datas);
     // Fetch request to API
-    const response = await fetch(API_DOMAIN + "text-to-speech-and-infer/", {
+    const response = await fetch(AI_DOMAIN + "text-to-speech-and-infer/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -37,7 +37,7 @@ export const textToSpeechWithFileInput = async (formData) => {
 
   try {
     // Fetch request to API
-    const response = await fetch(API_DOMAIN + "text-file-to-speech-and-infer/", {
+    const response = await fetch(AI_DOMAIN + "text-file-to-speech-and-infer/", {
       method: "POST",
       body: formData,
     });

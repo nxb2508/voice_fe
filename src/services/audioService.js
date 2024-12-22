@@ -1,8 +1,8 @@
-import { API_DOMAIN } from "../constants/variables";
+import { AI_DOMAIN } from "../constants/variables";
 
 export const changeVoiceWithSelectedModel = async ({ options }) => {
 
-  console.log(API_DOMAIN);
+  console.log(AI_DOMAIN);
 
   const formData = new FormData();
   console.log("options", options);
@@ -15,7 +15,7 @@ export const changeVoiceWithSelectedModel = async ({ options }) => {
 
   try {
     // Fetch request to API
-    const response = await fetch(API_DOMAIN + "infer-audio/", {
+    const response = await fetch(AI_DOMAIN + "infer-audio/", {
       method: "POST",
       body: formData,
     });

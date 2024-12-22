@@ -1,9 +1,9 @@
-import { API_DOMAIN } from "../constants/variables";
+import { BE_DOMAIN } from "../constants/variables";
 import { getCookie } from "../helper/cookie";
 
 export const trainModel = async ({ options }) => {
 
-  console.log(API_DOMAIN);
+  console.log(BE_DOMAIN);
 
   const formData = new FormData();
   console.log("options", options);
@@ -18,7 +18,7 @@ export const trainModel = async ({ options }) => {
 
   try {
     // Fetch request to API
-    const response = await fetch("https://be.dinhmanhhung.net/api/models/train", {
+    const response = await fetch(BE_DOMAIN + "api/models/train", {
       method: "POST",
       body: formData,
       headers: new Headers({

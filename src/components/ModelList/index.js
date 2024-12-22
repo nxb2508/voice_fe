@@ -87,33 +87,29 @@ function ModelList({ onSelectModel, clearSelectedModel, filter }) {
       <h2 style={{ color: "#FFF" }}>Select voice type</h2>
       <Divider
         style={{
-          borderColor: "rgba(158,154,154,.2)",
+          borderColor: "rgba(158,154,154,.2)"
         }}
       />
-      <Row gutter={[16, 24]}>
-        <>
-          {Object.entries(data).map(([category, models]) => (
-            <React.Fragment key={category}>
-              <Col span={24}>
-                <p style={{ color: "#FFF" }}>{category}</p>
-              </Col>
-              {models.map((model) => (
-                <Col span={12} key={model.id_model}>
-                  <button
-                    onClick={() => handleSelectModel(model.id)}
-                    className={
-                      "btn__choose-models " +
-                      (selectedModels === model.id ? "selected" : "")
-                    }
-                  >
-                    <div>{model.model_name}</div>
-                  </button>
-                </Col>
-              ))}
-            </React.Fragment>
+      {Object.entries(data).map(([category, models], categoryIndex) => (
+        <Row gutter={[16, 8]} key={categoryIndex}>
+          <Col span={24}>
+            <p style={{ color: "#FFF" }}>{models[0].category_name}</p>
+          </Col>
+          {models.map((model, modelIndex) => (
+            <Col span={12} key={modelIndex}>
+              <button
+                onClick={() => handleSelectModel(model.id)}
+                className={
+                  "btn__choose-models " +
+                  (selectedModels === model.id ? "selected" : "")
+                }
+              >
+                <div>{model.name_model}</div>
+              </button>
+            </Col>
           ))}
-        </>
-      </Row>
+        </Row>
+      ))}
     </>
   );
 }

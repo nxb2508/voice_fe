@@ -3,9 +3,10 @@ import LayoutDefault from "../components/Layouts/LayoutDefault";
 import AudioRecorder from "../components/AudioRecorder";
 import VoiceChanger from "../pages/VoiceChanger";
 import TextToSpeech from "../pages/TextToSpeech";
-import VoiceType from "../pages/VoiceType";
-import TrainModel from "../pages/TrainModel";
 import PrivateRoutes from "../components/PrivateRoutes";
+import ModelManage from "../pages/UserModelManage";
+import CreateModel from "../pages/UserModelManage/CreateModel";
+
 export const routes = [
   {
     path: "/",
@@ -35,8 +36,12 @@ export const routes = [
         element: <PrivateRoutes />,
         children: [
           {
-            path: "train-model",
-            element: <TrainModel />,
+            path: "manage-model",
+            element: <ModelManage />,
+          },
+          {
+            path: "create-model",
+            element: <CreateModel />,
           },
         ]
       }
