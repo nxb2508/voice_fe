@@ -111,17 +111,17 @@ function CreateModel() {
       >
         <p>{messageTrain}</p>
       </Modal>
-      <h1 className="voice-changer__title">Create Your Own Model</h1>
-      <div className="voice-changer__container">
-        <div className="voice-changer__content">
+      <h1 className="create-model__title">Create Your Own Model</h1>
+      <div className="create-model__container">
+        <div className="create-model__content">
           {inputAudioUrl || inputAudioBlob ? (
             <>
-              <div className="voice-changer__models">
+              <div className="create-model__models">
                 {
                   <>
                     <div style={{ display: "flex", justifyContent: "center" }}>
                       <h2
-                        className="voice-changer__input--title"
+                        className="create-model__input--title"
                         style={{ color: "#FFF" }}
                       >
                         Config Your Model
@@ -162,16 +162,16 @@ function CreateModel() {
                   </>
                 }
               </div>
-              <div className="voice-changer__audio">
-                <div className="voice-changer__input">
+              <div className="create-model__audio">
+                <div className="create-model__input">
                   <h2
-                    className="voice-changer__input--title"
+                    className="create-model__input--title"
                     style={{ color: "#FFF" }}
                   >
                     Input
                   </h2>
                   <Button
-                    className="voice-changer__input--btnDelete"
+                    className="create-model__input--btnDelete"
                     type="primary"
                     danger
                     icon={<DeleteOutlined />}

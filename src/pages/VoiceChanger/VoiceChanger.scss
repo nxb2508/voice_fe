@@ -46,6 +46,26 @@
     width: 70%;
     height: 100%;
   }
+
+  &__upload {
+    width: 100%;
+
+    &__audioRecorder {
+
+    }
+
+    &--uploadAudio {
+      height: 100%;
+      .upload-audio {
+        height: 100%;
+      }
+
+      @media (max-width: 768px) {
+        margin-top: 20px;
+        height: 300px;
+      }
+    }
+  }
 }
 
 .voice-changer__input {

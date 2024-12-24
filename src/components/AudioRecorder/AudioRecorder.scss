@@ -5,6 +5,11 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-size: 24px;
+    margin-top: 1rem;
+
+    @media screen and (max-width: 768px) {
+      margin-top: 0;
+    }
   }
 
   &__btn-record {
@@ -12,8 +17,22 @@
     background: #fff;
   }
 
-  &__txt-progress{
-    color: #FFF;
+  &__txt-progress {
+    color: #fff;
     font-size: 18px;
+  }
+
+  &__select-mic {
+    width: 60%;
+    @media (max-width: 768px) {
+      width: 100%;
+    }
+  }
+
+  &__waveform {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 1rem;
+    background-color: #f5f5f5;
   }
 }

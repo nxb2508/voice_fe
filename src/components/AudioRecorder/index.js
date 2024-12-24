@@ -114,8 +114,8 @@ const AudioRecorder = ({ onRecordComplete }) => {
         <Select
           value={selectedDevice}
           onChange={(value) => setSelectedDevice(value)}
-          style={{ width: 200 }}
           placeholder="Select mic"
+          className="audio-recorder__select-mic"
         >
           {devices.map((device) => (
             <Option key={device.deviceId} value={device.deviceId}>
@@ -124,17 +124,14 @@ const AudioRecorder = ({ onRecordComplete }) => {
           ))}
         </Select>
 
-        <Text strong className="audio-recorder__txt-progress">{progress}</Text>
+        <Text strong className="audio-recorder__txt-progress">
+          {progress}
+        </Text>
 
         <div
           id="mic"
           ref={waveformRef}
-          style={{
-            border: "1px solid #ddd",
-            borderRadius: "4px",
-            marginTop: "1rem",
-            backgroundColor: "#F5F5F5",
-          }}
+          className="audio-recorder__waveform"
         ></div>
         <div ref={containerRecordingsRef} style={{ margin: "1rem 0" }}></div>
       </Space>

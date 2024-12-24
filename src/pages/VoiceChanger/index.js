@@ -302,19 +302,37 @@ function VoiceChanger() {
           ) : (
             <>
               <Row
-                gutter={16}
+                gutter={{ xs: 0, sm: 0, md: 16, lg: 16, xl: 16 }}
                 justify="space-between"
-                style={{ width: "100%", height: "500px" }}
+                justify-xs="center"
+                justify-sm="center"
+                align="middle"
+                className="voice-changer__upload"
               >
-                <Col className="gutter-row" span={12}>
+                <Col
+                  className="gutter-row voice-changer__upload--audioRecorder"
+                  xs={24}
+                  sm={24}
+                  md={12}
+                  lg={12}
+                  xl={12}
+                >
                   <AudioRecorder
+                    className="audio-recorder"
                     onRecordComplete={handleChangeAudioBlobInput}
                   />
                 </Col>
-                <Col className="gutter-row" span={12}>
+                <Col
+                  className="gutter-row voice-changer__upload--uploadAudio"
+                  xs={24}
+                  sm={24}
+                  md={12}
+                  lg={12}
+                  xl={12}
+                >
                   <UploadAudio
+                    className="upload-audio"
                     onUpload={handleChangeAudioUrlInput}
-                    style={{ height: "100%" }}
                   />
                 </Col>
               </Row>

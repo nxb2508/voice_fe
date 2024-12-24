@@ -1,9 +1,9 @@
-.voice-changer__container {
+.create-model__container {
   min-height: 521px;
   max-height: 640px;
 }
 
-.voice-changer {
+.create-model {
   &__title {
     text-align: center;
     background: linear-gradient(90deg, #a2fffd 0%, #fb71fe 100%);
@@ -30,12 +30,12 @@
 }
 
 
-.voice-changer__input {
+.create-model__input {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.voice-changer__input--title {
+.create-model__input--title {
     margin-bottom: 5px;
 }
