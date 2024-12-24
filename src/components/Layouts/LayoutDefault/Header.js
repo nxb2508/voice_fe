@@ -10,7 +10,8 @@ import {
 import { deleteAllCookies, getCookie, setCookie } from "../../../helper/cookie";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, message } from "antd";
+import { Button, message, Modal, Dropdown, Avatar } from "antd";
+import { LogoutOutlined, LoginOutlined, GoogleOutlined } from "@ant-design/icons";
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
   authDomain: process.env.REACT_APP_AUTH_DOMAIN,
@@ -27,6 +28,7 @@ const auth = getAuth(app);
 function Header() {
   const [token, setToken] = useState(getCookie("token"));
   const [user, setUser] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const navigate = useNavigate();
   const handleGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
@@ -53,7 +55,8 @@ function Header() {
       if (data) {
         setCookie("token", data.token, 1);
         setToken(data.token);
-        alert(`Welcome, ${user.displayName}!`);
+        message.success("Sign in successfully");
+        setIsModalVisible(false);
       }
     } catch (error) {
       alert("Failed to sign in with Google");
@@ -72,11 +75,55 @@ function Header() {
     navigate("/");
   };
 
+  const profileItems = [
+    {
+      key: "name",
+      label: (
+        <div
+          style={{
+            fontSize: "16px",
+          }}
+        >
+          Hi, {user ? user.displayName : ""}
+        </div>
+      ),
+    },
+    {
+      key: "logout",
+      label: (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            cursor: "pointer",
+            justifyContent: "center",
+            fontSize: "16px",
+          }}
+        >
+          <LogoutOutlined />
+          <span
+            style={{
+              marginLeft: "10px",
+            }}
+          >
+            {"Logout"}
+          </span>
+        </div>
+      ),
+      onClick: handleLogout,
+    },
+  ];
+
+  const showLoginModal = () => {
+    setIsModalVisible(true);
+  };
+
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
         console.log(user);
+        console.log(user.photoURL);
       } else {
         setUser(null);
         deleteAllCookies();
@@ -86,33 +133,67 @@ function Header() {
   }, []);
 
   return (
-    <header className="layout__header">
-      <div className={"layout__logo "}>
-        <Link to="/voice-changer">{"Voice Tools"}</Link>
-      </div>
-      <div className="layout__nav">
-        <NavLink className="nav-header" to="/voice-changer">
-          {"Voice Changer"}
-        </NavLink>
-        <NavLink className="nav-header" to="/text-to-speech">
-          {"Text To Speech"}
-        </NavLink>
-        {token ? (
-          <>
-            <NavLink className="nav-header" to="/manage-model">
-              {"Manage Model"}
-            </NavLink>
-            <Button className="nav-header" onClick={handleLogout}>
-              {"Logout"}
-            </Button>
-          </>
-        ) : (
-          <Link className="nav-header" onClick={handleGoogleSignIn}>
-            {"Login"}
-          </Link>
-        )}
-      </div>
-    </header>
+    <>
+      <Modal
+        title="Login"
+        open={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        footer={null}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          fontSize: "20px",
+        }}
+        centered={true}
+      >
+        <Button onClick={handleGoogleSignIn} icon={<GoogleOutlined />}>
+          {"Continue in with Google"}
+        </Button>
+      </Modal>
+      <header className="layout__header">
+        <div className={"layout__logo "}>
+          <Link to="/voice-changer">{"Voice Tools"}</Link>
+        </div>
+        <div className="layout__nav">
+          <NavLink className="nav-header" to="/voice-changer">
+            {"Voice Changer"}
+          </NavLink>
+          <NavLink className="nav-header" to="/text-to-speech">
+            {"Text To Speech"}
+          </NavLink>
+          {token ? (
+            <>
+              <NavLink className="nav-header" to="/manage-model">
+                {"Manage Model"}
+              </NavLink>
+              <Dropdown
+                menu={{
+                  items: profileItems,
+                }}
+                placement="bottomRight"
+                arrow
+              >
+                <Avatar
+                  src={user && user.photoURL ? user.photoURL : null}
+                  size={60}
+                />
+              </Dropdown>
+            </>
+          ) : (
+            <Link className="nav-header" onClick={showLoginModal}>
+              <LoginOutlined />
+              <span
+                style={{
+                  marginLeft: "5px",
+                }}
+              >
+                {"Login"}
+              </span>
+            </Link>
+          )}
+        </div>
+      </header>
+    </>
   );
 }
 
