@@ -123,6 +123,7 @@ function Header() {
       if (user) {
         setUser(user);
         deleteAllCookies();
+        setCookie("token", user.accessToken, 1);
         setToken(user.accessToken);
         // console.log(user);
         // console.log(user.photoURL);
