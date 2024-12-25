@@ -6,15 +6,16 @@ import {
 } from "../../services/modelService";
 import EditModel from "./EditModel";
 import DeleteModel from "./DeleteModel";
-
-import { Divider, message, Table, Tag } from "antd";
+import { Link } from "react-router-dom";
+import { Button, Divider, message, Table, Tag } from "antd";
 import { getCookie } from "../../helper/cookie";
-import { SyncOutlined } from "@ant-design/icons";
+import { SyncOutlined, PlusOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 import "./UserModelList.scss";
 
 function UserModelList() {
   const [data, setData] = useState([]);
   const [modelsIsTrainning, setModelsIsTrainning] = useState([]);
+  const [isShowBtnCreate, setIsShowBtnCreate] = useState(false);
   const fetchApi = async () => {
     try {
       const token = getCookie("token");
@@ -23,12 +24,13 @@ function UserModelList() {
         if (response) {
           const myModels = response.filter((item) => item.category == 1);
           setData(myModels);
-          console.log(myModels);
+          // console.log(myModels);
         }
         const responseIsTrainning = await getMyModelsIsTrainning();
         if (responseIsTrainning) {
-          console.log(responseIsTrainning);
+          // console.log(responseIsTrainning);
           setModelsIsTrainning(responseIsTrainning);
+          setIsShowBtnCreate(responseIsTrainning.length === 0);
         }
       }
     } catch (error) {
@@ -61,10 +63,7 @@ function UserModelList() {
           }}
         >
           <EditModel record={record} onReload={handleReload} />
-          <DeleteModel
-            record={record}
-            onReload={handleReload}
-          />
+          <DeleteModel record={record} onReload={handleReload} />
         </div>
       ),
     },
@@ -88,6 +87,15 @@ function UserModelList() {
 
   return (
     <>
+      {isShowBtnCreate ? (
+        <Link to="/create-model">
+          <Button icon={<PlusOutlined />}>Create New Model</Button>
+        </Link>
+      ) : (
+        <div className="text-warning-train">
+          Attention: You can only create one model at a time. Please wait...
+        </div>
+      )}
       <Divider
         style={{
           borderColor: "rgba(158,154,154,.2)",

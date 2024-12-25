@@ -40,7 +40,7 @@ function CreateModel() {
 
   const handleOk = () => {
     setModalTrain(false);
-    navigate('/voice-changer');
+    navigate('/manage-model');
   };
 
   const handleCancel = () => {
