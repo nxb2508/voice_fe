@@ -13,7 +13,9 @@ function DeleteModel(props) {
   };
   return (
     // bạn chắc chắn muốn xóa model này? là title của Popconfirm tiếng anh
-    <>
+    <div style={{
+      marginLeft: "10px"
+    }}>
       <Tooltip title="Delete">
         <Popconfirm
           title="Are you sure you want to delete this model?"
@@ -27,7 +29,7 @@ function DeleteModel(props) {
           ></Button>
         </Popconfirm>
       </Tooltip>
-    </>
+    </div>
   );
 }
 

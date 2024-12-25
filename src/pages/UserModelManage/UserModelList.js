@@ -54,10 +54,18 @@ function UserModelList() {
       title: "Action",
       key: "actions",
       render: (_, record) => (
-        <>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+          }}
+        >
           <EditModel record={record} onReload={handleReload} />
-          <DeleteModel record={record} onReload={handleReload} />
-        </>
+          <DeleteModel
+            record={record}
+            onReload={handleReload}
+          />
+        </div>
       ),
     },
   ];
