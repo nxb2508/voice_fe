@@ -98,7 +98,7 @@ function CreateModel() {
 
   return (
     <>
-      <GoBack />
+      {/* <GoBack /> */}
       <Modal
         title="Processing"
         open={loading} // Modal hiện khi loading = true

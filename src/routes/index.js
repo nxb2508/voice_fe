@@ -14,7 +14,7 @@ export const routes = [
     children: [
       {
         index: true,
-        element: <VoiceChanger />,
+        element: <Navigate to="/voice-changer" replace />,
       },
       {
         path: "voice-changer",

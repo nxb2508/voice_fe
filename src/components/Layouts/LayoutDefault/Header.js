@@ -10,8 +10,25 @@ import {
 import { deleteAllCookies, getCookie, setCookie } from "../../../helper/cookie";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, message, Modal, Dropdown, Avatar } from "antd";
-import { LogoutOutlined, LoginOutlined, GoogleOutlined } from "@ant-design/icons";
+import {
+  Button,
+  message,
+  Modal,
+  Dropdown,
+  Avatar,
+  Drawer,
+  Collapse,
+} from "antd";
+import {
+  LogoutOutlined,
+  LoginOutlined,
+  GoogleOutlined,
+  SettingOutlined,
+  HistoryOutlined,
+  MenuOutlined,
+  DownOutlined,
+  RightOutlined,
+} from "@ant-design/icons";
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
   authDomain: process.env.REACT_APP_AUTH_DOMAIN,
@@ -29,7 +46,22 @@ function Header() {
   const [token, setToken] = useState(getCookie("token"));
   const [user, setUser] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isMobileShow, setIsMobileShow] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const navigate = useNavigate();
+
+  const handleCloseDrawer = () => {
+    setIsMobileShow(false);
+  };
+
+  const handleOpenDrawer = () => {
+    setIsMobileShow(true);
+  };
+
+  const handleToggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   const handleGoogleSignIn = async () => {
     const provider = new GoogleAuthProvider();
 
@@ -100,6 +132,54 @@ function Header() {
             fontSize: "16px",
           }}
         >
+          <SettingOutlined />
+          <span
+            style={{
+              marginLeft: "10px",
+            }}
+          >
+            {"Mange Model"}
+          </span>
+        </div>
+      ),
+      onClick: () => navigate("/manage-model"),
+    },
+    {
+      key: "logout",
+      label: (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            cursor: "pointer",
+            justifyContent: "center",
+            fontSize: "16px",
+          }}
+        >
+          <HistoryOutlined />
+          <span
+            style={{
+              marginLeft: "10px",
+            }}
+          >
+            {"History of changes"}
+          </span>
+        </div>
+      ),
+      onClick: () => navigate("/history"),
+    },
+    {
+      key: "logout",
+      label: (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            cursor: "pointer",
+            justifyContent: "center",
+            fontSize: "16px",
+          }}
+        >
           <LogoutOutlined />
           <span
             style={{
@@ -111,6 +191,90 @@ function Header() {
         </div>
       ),
       onClick: handleLogout,
+    },
+  ];
+
+  const accordionItems = [
+    {
+      key: "1",
+      label: (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            cursor: "pointer",
+            justifyContent: "center",
+            fontSize: "18px",
+            color: "#fff",
+          }}
+        >
+          <Avatar
+            src={user && user.photoURL ? user.photoURL : null}
+            size={48}
+          />
+          <div
+            style={{
+              fontSize: "16px",
+              marginLeft: "10px",
+              marginRight: "10px",
+            }}
+          >
+            {user ? user.displayName : ""}
+          </div>
+          {!isExpanded ? <DownOutlined /> : <RightOutlined />}
+        </div>
+      ),
+      children: (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+          }}
+        >
+          <NavLink to="/manage-model">
+            <SettingOutlined />
+            <span
+              style={{
+                marginLeft: "10px",
+              }}
+            >
+              {"Mange Model"}
+            </span>
+          </NavLink>
+          <NavLink to="/history">
+            <HistoryOutlined />
+            <span
+              style={{
+                marginLeft: "10px",
+              }}
+            >
+              {"History of changes"}
+            </span>
+          </NavLink>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              cursor: "pointer",
+              justifyContent: "center",
+              fontSize: "18px",
+              color: "#fff",
+            }}
+            onClick={handleLogout}
+          >
+            <LogoutOutlined />
+            <span
+              style={{
+                marginLeft: "10px",
+              }}
+            >
+              {"Logout"}
+            </span>
+          </div>
+        </div>
+      ),
+      showArrow: false,
     },
   ];
 
@@ -166,8 +330,8 @@ function Header() {
           </NavLink>
           {token ? (
             <>
-              <NavLink className="nav-header" to="/manage-model">
-                {"Manage Model"}
+              <NavLink className="nav-header" to="/create-model">
+                {"Create Model"}
               </NavLink>
               <Dropdown
                 menu={{
@@ -179,6 +343,10 @@ function Header() {
                 <Avatar
                   src={user && user.photoURL ? user.photoURL : null}
                   size={48}
+                  style={{
+                    cursor: "pointer",
+                    marginRight: "30px",
+                  }}
                 />
               </Dropdown>
             </>
@@ -194,6 +362,55 @@ function Header() {
               </span>
             </Link>
           )}
+        </div>
+        <div className="layout__nav-mobile">
+          <div className="layout__nav-mobile__menu">
+            <MenuOutlined onClick={handleOpenDrawer} />
+          </div>
+          <Drawer
+            onClose={handleCloseDrawer}
+            open={isMobileShow}
+            className="layout__nav-mobile__drawer"
+            style={{
+              backgroundColor: "#26252e",
+            }}
+          >
+            <div className="layout__nav-mobile__content">
+              <NavLink className="nav-header" to="/voice-changer">
+                {"Voice Changer"}
+              </NavLink>
+              <NavLink className="nav-header" to="/text-to-speech">
+                {"Text To Speech"}
+              </NavLink>
+              {token ? (
+                <>
+                  <NavLink className="nav-header" to="/manage-model">
+                    {"Manage Model"}
+                  </NavLink>
+                  <Collapse
+                    defaultActiveKey={["1"]}
+                    items={accordionItems}
+                    bordered={false}
+                    onChange={handleToggleExpand}
+                    style={{
+                      padding: "0",
+                    }}
+                  />
+                </>
+              ) : (
+                <Link className="nav-header" onClick={showLoginModal}>
+                  <LoginOutlined />
+                  <span
+                    style={{
+                      marginLeft: "5px",
+                    }}
+                  >
+                    {"Login"}
+                  </span>
+                </Link>
+              )}
+            </div>
+          </Drawer>
         </div>
       </header>
     </>
