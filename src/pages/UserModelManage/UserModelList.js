@@ -20,17 +20,17 @@ function UserModelList() {
     try {
       const token = getCookie("token");
       if (token) {
-        const response = await getMyModels();
-        if (response) {
-          const myModels = response.filter((item) => item.category == 1);
-          setData(myModels);
-          // console.log(myModels);
-        }
         const responseIsTrainning = await getMyModelsIsTrainning();
         if (responseIsTrainning) {
           // console.log(responseIsTrainning);
           setModelsIsTrainning(responseIsTrainning);
           setIsShowBtnCreate(responseIsTrainning.length === 0);
+        }
+        const response = await getMyModels();
+        if (response) {
+          const myModels = response.filter((item) => item.category == 1);
+          setData(myModels);
+          // console.log(myModels);
         }
       }
     } catch (error) {

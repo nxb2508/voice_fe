@@ -5,8 +5,8 @@ import ModelList from "../../components/ModelList";
 import { trainModel } from "../../services/trainService";
 import { Modal, Tag, Button, Divider, Row, Col, message, Input } from "antd";
 import { useState, useCallback, useEffect } from "react";
-import { DeleteOutlined } from "@ant-design/icons";
-import { useNavigate } from 'react-router-dom';
+import { DeleteOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 import "./CreateModel.scss";
 import GoBack from "../../components/GoBack";
 function base64ToBlob(base64, mimeType) {
@@ -29,6 +29,7 @@ function CreateModel() {
   const [loading, setLoading] = useState(false); // Thêm trạng thái loading
   const [messageTrain, setMessageTrain] = useState("");
   const [modalTrain, setModalTrain] = useState(false);
+  const [modalTrainError, setModalTrainError] = useState(false);
   const [inputEpochs, setInputEpochs] = useState(0);
   const navigate = useNavigate();
 
@@ -40,16 +41,20 @@ function CreateModel() {
 
   const handleOk = () => {
     setModalTrain(false);
-    navigate('/manage-model');
+    navigate("/manage-model");
   };
 
   const handleCancel = () => {
     setModalTrain(false);
   };
 
-  useEffect(() => {
-    console.log(inputNameModel);
-  }, [inputNameModel]);
+  const handleOkError = () => {
+    setModalTrainError(false);
+  };
+
+  // useEffect(() => {
+  //   console.log(inputNameModel);
+  // }, [inputNameModel]);
 
   const handleChangeNameModel = (e) => {
     setInputNameModel(e.target.value);
@@ -57,7 +62,6 @@ function CreateModel() {
 
   const handleChangeEpochs = (e) => {
     setInputEpochs(e.target.value);
-
   };
 
   const handleChangeVoice = async () => {
@@ -77,14 +81,16 @@ function CreateModel() {
         setMessageTrain(result.message);
         setModalTrain(true);
       } else {
-        console.error("Failed to change voice");
-        message.error("Failed to change voice. Please try again.");
+        setModalTrainError(true);
+        console.error("Failed to train model");
+        // message.error("Failed to train model");
       }
     } catch (error) {
-      console.error("Error during voice change:", error);
-      message.error(
-        "An error occurred while processing. Please try again later."
-      );
+      setModalTrainError(true);
+      console.error("Error during training model", error);
+      // message.error(
+      //   "An error occurred while processing. Please try again later."
+      // );
     } finally {
       setLoading(false); // Tắt trạng thái loading sau khi hoàn thành API call
     }
@@ -111,6 +117,29 @@ function CreateModel() {
       >
         <p>{messageTrain}</p>
       </Modal>
+      <Modal
+        open={modalTrainError} // Modal hiện khi loading = true
+        centered
+        onOk={handleOkError}
+        onCancel={handleOkError}
+        footer={[
+          <Button
+            key="primary"
+            color="danger"
+            variant="solid"
+            onClick={handleOkError}
+          >
+            OK
+          </Button>,
+        ]}
+      >
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <CloseCircleOutlined style={{ color: "red", fontSize: "100px" }} />
+        </div>
+        <p style={{ textAlign: "center", fontSize: "18px", marginTop: "40px" }}>
+          An error occurred while processing. Please try again later.
+        </p>
+      </Modal>
       <h1 className="create-model__title">Create Your Own Model</h1>
       <div className="create-model__container">
         <div className="create-model__content">
@@ -132,6 +161,7 @@ function CreateModel() {
                       style={{
                         borderColor: "rgba(158,154,154,.2)",
                       }}
+                      className="create-model__divider"
                     />
                     <Input
                       placeholder="Enter model name"
@@ -142,6 +172,7 @@ function CreateModel() {
                       style={{
                         borderColor: "rgba(158,154,154,.2)",
                       }}
+                      className="create-model__divider"
                     />
                     <Input
                       placeholder="Enter epochs"
@@ -149,7 +180,7 @@ function CreateModel() {
                       style={{ marginBottom: "20px" }}
                     />
 
-                    {(inputNameModel.length > 0 && parseInt(inputEpochs) > 0) && (
+                    {inputNameModel.length > 0 && parseInt(inputEpochs) > 0 && (
                       <Button
                         type="primary"
                         onClick={handleChangeVoice}
