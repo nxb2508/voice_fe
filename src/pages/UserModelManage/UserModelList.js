@@ -9,7 +9,11 @@ import DeleteModel from "./DeleteModel";
 import { Link } from "react-router-dom";
 import { Button, Divider, message, Table, Tag } from "antd";
 import { getCookie } from "../../helper/cookie";
-import { SyncOutlined, PlusOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
+import {
+  SyncOutlined,
+  PlusOutlined,
+  ExclamationCircleOutlined,
+} from "@ant-design/icons";
 import "./UserModelList.scss";
 
 function UserModelList() {
@@ -22,7 +26,7 @@ function UserModelList() {
       if (token) {
         const responseIsTrainning = await getMyModelsIsTrainning();
         if (responseIsTrainning) {
-          // console.log(responseIsTrainning);
+          console.log(responseIsTrainning);
           setModelsIsTrainning(responseIsTrainning);
           setIsShowBtnCreate(responseIsTrainning.length === 0);
         }
@@ -30,7 +34,7 @@ function UserModelList() {
         if (response) {
           const myModels = response.filter((item) => item.category == 1);
           setData(myModels);
-          // console.log(myModels);
+          console.log(myModels);
         }
       }
     } catch (error) {
@@ -46,11 +50,66 @@ function UserModelList() {
     fetchApi();
   };
 
+  function formatDateByString(isoString) {
+    // Chuyển chuỗi ISO thành đối tượng Date
+    const date = new Date(isoString);
+
+    // Lấy thông tin ngày, tháng, năm, giờ, phút, giây
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Tháng bắt đầu từ 0
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
+
+    // Định dạng ngày và giờ
+    const formattedDate = `${day}/${month}/${year}`;
+    const formattedTime = `${hours}:${minutes}`;
+
+    return {
+      date: formattedDate,
+      time: formattedTime,
+    };
+  }
+
+  function formatDateByTimestamp(seconds, nanoseconds) {
+    // Chuyển đổi giây thành milliseconds
+    const milliseconds = seconds * 1000 + Math.floor(nanoseconds / 1e6);
+  
+    // Tạo đối tượng Date
+    const date = new Date(milliseconds);
+  
+    // Lấy thông tin ngày, tháng, năm, giờ, phút, giây
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const secondsFormatted = String(date.getSeconds()).padStart(2, '0');
+  
+    // Định dạng ngày và giờ
+    const formattedDate = `${day}/${month}/${year}`;
+    const formattedTime = `${hours}:${minutes}`;
+  
+    return {
+      date: formattedDate,
+      time: formattedTime,
+    };
+  }
+
   const modelsColumns = [
     {
       title: "Name",
       dataIndex: "name_model",
       key: "id",
+    },
+    {
+      title: "Created At",
+      key: "created_at",
+      render: (_, record) => {
+        const { date, time } = formatDateByString(record.createdAt);
+        return time + " " + date;
+      },
     },
     {
       title: "Action",
@@ -74,6 +133,16 @@ function UserModelList() {
       title: "Name",
       dataIndex: "name",
       key: "id",
+    },
+    {
+      title: "Train At",
+      render: (_, record) => {
+        const { date, time } = formatDateByTimestamp(
+          record.trainAt._seconds,
+          record.trainAt._nanoseconds
+        );
+        return time + " " + date;
+      },
     },
     {
       title: "Status",

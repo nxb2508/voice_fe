@@ -121,7 +121,7 @@ function Header() {
       ),
     },
     {
-      key: "logout",
+      key: "manage-model",
       label: (
         <div
           style={{
@@ -145,7 +145,7 @@ function Header() {
       onClick: () => navigate("/manage-model"),
     },
     {
-      key: "logout",
+      key: "history",
       label: (
         <div
           style={{
