@@ -103,10 +103,23 @@ function CreateModel() {
         title="Processing"
         open={loading} // Modal hiện khi loading = true
         footer={null} // Không có footer để tránh người dùng bấm đóng
-        closable={false} // Không thể đóng modal khi đang loading
         centered // Canh giữa màn hình
+        // closable={false} // Không thể đóng modal khi đang loading
+        onCancel={() => navigate("/voice-changer")} // Không thể đóng modal khi đang loading
+        footer={[
+          <Button
+            key="primary"
+            type="primary"
+            onClick={() => navigate("/voice-changer")}
+          >
+            OK
+          </Button>,
+        ]}
       >
-        <p>Please wait, the audio is being processed...</p>
+        <p>
+          While waiting for the model to finish training, you can use other
+          features.
+        </p>
       </Modal>
       <Modal
         title="Train Model"
