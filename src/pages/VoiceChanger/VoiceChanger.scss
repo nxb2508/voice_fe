@@ -84,6 +84,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
     margin-top: 20px;
     // background: #f5f5f5;
 
@@ -91,33 +92,67 @@
       width: 40%;
       display: flex;
       align-items: center;
-      margin-right: 20px;
       justify-content: space-between;
+      padding-right: 20px;
 
       &__title {
         width: 40%;
         font-size: 16px;
+        @media (max-width: 1200px) {
+          font-size: 14px;
+          width: 30%;
+        }
       }
 
       &__slider {
         width: 60%;
+        @media (max-width: 1200px) {
+          width: 70%;
+        }
       }
+
+      @media (max-width: 1200px) {
+        width: 100%;
+      }
+
+
     }
 
     .volume {
       width: 40%;
       display: flex;
       align-items: center;
-      margin-right: 20px;
       justify-content: space-between;
+      padding-right: 20px;
 
       &__title {
         width:40%;
         font-size: 16px;
+        @media (max-width: 1200px) {
+          font-size: 14px;
+          width: 30%;
+        }
       }
 
       &__slider {
         width: 60%;
+        @media (max-width: 1200px) {
+          width: 70%;
+        }
+      }
+
+      @media (max-width: 1200px) {
+        width: 100%;
+      }
+    }
+
+    .btn-edit-audio {
+      width: 20%;
+      background-color: #D0B4FD;
+
+      @media (max-width: 1200px) {
+        width: 100%;
+        margin-top: 10px;
       }
     }
   }

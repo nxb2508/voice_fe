@@ -343,7 +343,7 @@ function TextToSpeech() {
                     type="primary"
                     onClick={editAudio}
                     loading={loading} // Trạng thái loading
-                    style={{ width: "20%", backgroundColor: "#D0B4FD" }}
+                    className="btn-edit-audio"
                   >
                     Edit
                   </Button>

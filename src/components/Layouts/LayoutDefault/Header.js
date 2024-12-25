@@ -36,7 +36,7 @@ function Header() {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      console.log(user);
+      // console.log(user);
       const idToken = await user.getIdToken();
 
       const response = await fetch(
@@ -122,8 +122,10 @@ function Header() {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
-        console.log(user);
-        console.log(user.photoURL);
+        deleteAllCookies();
+        setToken(user.accessToken);
+        // console.log(user);
+        // console.log(user.photoURL);
       } else {
         setUser(null);
         deleteAllCookies();
@@ -139,11 +141,11 @@ function Header() {
         open={isModalVisible}
         onCancel={() => setIsModalVisible(false)}
         footer={null}
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          fontSize: "20px",
-        }}
+        // style={{
+        //   display: "flex",
+        //   justifyContent: "center",
+        //   fontSize: "20px",
+        // }}
         centered={true}
       >
         <Button onClick={handleGoogleSignIn} icon={<GoogleOutlined />}>
@@ -175,7 +177,7 @@ function Header() {
               >
                 <Avatar
                   src={user && user.photoURL ? user.photoURL : null}
-                  size={60}
+                  size={48}
                 />
               </Dropdown>
             </>

@@ -57,7 +57,7 @@ function CreateModel() {
 
   const handleChangeEpochs = (e) => {
     setInputEpochs(e.target.value);
-    
+
   };
 
   const handleChangeVoice = async () => {

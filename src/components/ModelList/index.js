@@ -84,14 +84,10 @@ function ModelList({ onSelectModel, clearSelectedModel, filter }) {
 
   return (
     <>
-      <h2 style={{ color: "#FFF" }}>Select model</h2>
-      <Divider
-        style={{
-          borderColor: "rgba(158,154,154,.2)"
-        }}
-      />
+      <h2 className="server-model-list__title">Select model</h2>
+      <Divider className="server-model-list__divider" />
       {Object.entries(data).map(([category, models], categoryIndex) => (
-        <Row gutter={[16, 8]} key={categoryIndex} className="model-list-info">
+        <Row gutter={[16, 8]} key={categoryIndex} className="server-model-list__info">
           <Col span={24}>
             <p className="category__name">{models[0].category_name}</p>
           </Col>
