@@ -6,6 +6,7 @@ import TextToSpeech from "../pages/TextToSpeech";
 import PrivateRoutes from "../components/PrivateRoutes";
 import ModelManage from "../pages/UserModelManage";
 import CreateModel from "../pages/UserModelManage/CreateModel";
+import History from "../pages/History";
 
 export const routes = [
   {
@@ -43,8 +44,12 @@ export const routes = [
             path: "create-model",
             element: <CreateModel />,
           },
-        ]
-      }
+          {
+            path: "history",
+            element: <History />,
+          },
+        ],
+      },
     ],
   },
 ];
