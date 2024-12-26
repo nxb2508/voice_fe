@@ -67,6 +67,25 @@
       margin-bottom: 10px;
     }
   }
+
+  &__warning-train {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    align-items: center;
+    flex-direction: column;
+
+    &-icon {
+      font-size: 100px;
+      color: #FFCC2A;
+    }
+
+    &-text {
+      font-size: 28px;
+      color: #FFCC2A;
+    }
+  }
 }
 
 
