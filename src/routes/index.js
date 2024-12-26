@@ -7,6 +7,7 @@ import PrivateRoutes from "../components/PrivateRoutes";
 import ModelManage from "../pages/UserModelManage";
 import CreateModel from "../pages/UserModelManage/CreateModel";
 import History from "../pages/History";
+import Login from "../pages/Login";
 
 export const routes = [
   {
@@ -28,6 +29,10 @@ export const routes = [
       {
         path: "recorder",
         element: <AudioRecorder />,
+      },
+      {
+        path: "login",
+        element: <Login />,
       },
       {
         path: "*",

@@ -6,7 +6,7 @@ function PrivateRoutes() {
 
   return (
     <>
-      {token ? (<Outlet />) : (<Navigate to="/" />)}
+      {token ? (<Outlet />) : (<Navigate to="/login" />)}
     </>
   )
 }
