@@ -31,8 +31,10 @@ export const changeVoiceWithSelectedModel = async ({ options }) => {
     }
 
     const result = await response.json();
-    console.log(result.url);
-    return result.url;
+    let url = result.url;
+    url = url.replace(/^http:/, "https:");
+    console.log("url", url);
+    return url;
   } catch (error) {
     console.error("Failed to process the audio:", error);
     throw error;

@@ -1,16 +1,27 @@
 import AudioPlayer from "../../components/AudioPlayer";
-import AudioRecorder from "../../components/AudioRecorder";
 import UploadAudio from "../../components/UploadAudio";
-import ModelList from "../../components/ModelList";
 import { trainModel } from "../../services/trainService";
-import { Modal, Tag, Button, Divider, Row, Col, message, Input } from "antd";
-import { useState, useCallback, useEffect } from "react";
-import { DeleteOutlined, CloseCircleOutlined, WarningOutlined } from "@ant-design/icons";
+import {
+  Button,
+  Divider,
+  Input,
+  Row,
+  Col,
+  Tooltip,
+  message,
+  Modal,
+} from "antd";
+import { useState, useEffect } from "react";
+import {
+  DeleteOutlined,
+  CloseCircleOutlined,
+  WarningOutlined,
+  InfoCircleOutlined,
+} from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { getCookie } from "../../helper/cookie";
 import { getMyModelsIsTrainning } from "../../services/modelService";
 import "./CreateModel.scss";
-import GoBack from "../../components/GoBack";
 function base64ToBlob(base64, mimeType) {
   const byteString = atob(base64.split(",")[1]);
   const ab = new ArrayBuffer(byteString.length);
@@ -224,7 +235,13 @@ function CreateModel() {
                           onChange={handleChangeEpochs}
                           style={{ marginBottom: "20px" }}
                         />
-
+                        <div className="create-model__tooltip-eopchs">
+                          <Tooltip title=" This is the number of times the model will be trained on the data. The more epochs, the more the model will learn about the data. However, too many epochs can lead to overfitting.">
+                            <span>
+                              <InfoCircleOutlined /> Note about epochs
+                            </span>
+                          </Tooltip>
+                        </div>
                         {inputNameModel.length > 0 &&
                           parseInt(inputEpochs) > 0 && (
                             <Button
@@ -294,20 +311,18 @@ function CreateModel() {
                 </>
               ) : (
                 <>
-                  <Row
-                    gutter={16}
-                    justify="space-between"
-                    style={{ width: "100%", height: "500px" }}
-                  >
-                    {/* <Col className="gutter-row" span={12}>
-                  <AudioRecorder
-                    onRecordComplete={handleChangeAudioBlobInput}
-                  />
-                </Col> */}
-                    <Col className="gutter-row" span={24}>
+                  <Row gutter={8} style={{ width: "100%" }}>
+                    <Col span={24}>
+                      <div className="create-model__tips">
+                        {
+                          "Hint: You should use files that are at least 3 minutes long with studio-quality."
+                        }
+                      </div>
+                    </Col>
+                    <Col span={24}>
                       <UploadAudio
                         onUpload={handleChangeAudioUrlInput}
-                        style={{ height: "100%" }}
+                        style={{ height: "80%" }}
                       />
                     </Col>
                   </Row>

@@ -86,8 +86,17 @@ function History() {
       if (token) {
         const response = await getMyHistories();
         if (response) {
-          setDataHistory(response);
-          console.log(response);
+          let changeUrl = response.map((item) => {
+            return {
+              ...item,
+              url_file: item.url_file.replace(/^http:/, "https:"),
+            };
+          });
+          changeUrl.sort((a, b) => {
+            return b.createdAt._seconds - a.createdAt._seconds;
+          });
+          setDataHistory(changeUrl);
+          console.log(changeUrl);
         }
       }
     } catch (error) {
@@ -195,10 +204,14 @@ function History() {
                     title="Are you sure you want to delete this audio?"
                     onConfirm={() => handleDelete(item.id)}
                   >
-                    <Button type="primary"
+                    <Button
+                      type="primary"
                       icon={<DeleteOutlined />}
                       style={{ backgroundColor: "rgb(208, 180, 253)" }}
-                    >Delete</Button>,
+                    >
+                      Delete
+                    </Button>
+                    ,
                   </Popconfirm>,
                 ]}
               >
