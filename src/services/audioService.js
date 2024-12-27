@@ -1,23 +1,26 @@
-import { AI_DOMAIN } from "../constants/variables";
+import { BE_DOMAIN } from "../constants/variables";
+import { getCookie } from "../helper/cookie";
 
 export const changeVoiceWithSelectedModel = async ({ options }) => {
-
-  console.log(AI_DOMAIN);
+  console.log(BE_DOMAIN);
 
   const formData = new FormData();
   console.log("options", options);
 
   // Append the audio file and model_id to the form data
-  formData.append("file", options.audio, 'input.wav'); // Ensure "file" is the correct field name
+  formData.append("file", options.audio, "input.wav"); // Ensure "file" is the correct field name
   formData.append("model_id", options.modelId);
 
   console.log("formData", formData);
 
   try {
     // Fetch request to API
-    const response = await fetch(AI_DOMAIN + "infer-audio/", {
+    const response = await fetch(BE_DOMAIN + "api/models/infer-audio/", {
       method: "POST",
       body: formData,
+      headers: new Headers({
+        Authorization: `Bearer ${getCookie("token")}`,
+      }),
     });
 
     // Handle errors in the response
@@ -27,14 +30,9 @@ export const changeVoiceWithSelectedModel = async ({ options }) => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    // Process the response as a blob since it's an audio file
-    const audioBlob = await response.blob();
-
-    // Create a URL from the blob
-    const audioUrl = URL.createObjectURL(audioBlob);
-
-    // Return the audio URL so it can be used to play the audio
-    return audioUrl;
+    const result = await response.json();
+    console.log(result.url);
+    return result.url;
   } catch (error) {
     console.error("Failed to process the audio:", error);
     throw error;

@@ -1,16 +1,21 @@
-import { AI_DOMAIN } from "../constants/variables";
+import { BE_DOMAIN } from "../constants/variables";
+import { getCookie } from "../helper/cookie";
 
 export const textToSpeechWithTextPlainInput = async (datas) => {
   try {
     console.log(datas);
     // Fetch request to API
-    const response = await fetch(AI_DOMAIN + "text-to-speech-and-infer/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(datas),
-    });
+    const response = await fetch(
+      BE_DOMAIN + "api/models/text-to-speech-and-infer/",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getCookie("token")}`,
+        },
+        body: JSON.stringify(datas),
+      }
+    );
 
     // Handle errors in the response
     if (!response.ok) {
@@ -19,14 +24,9 @@ export const textToSpeechWithTextPlainInput = async (datas) => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    // Process the response as a blob since it's an audio file
-    const audioBlob = await response.blob();
-
-    // Create a URL from the blob
-    const audioUrl = URL.createObjectURL(audioBlob);
-
-    // Return the audio URL so it can be used to play the audio
-    return audioUrl;
+    const result = await response.json();
+    console.log(result.url);
+    return result.url;
   } catch (error) {
     console.error("Failed to process the audio:", error);
     throw error;
@@ -34,13 +34,18 @@ export const textToSpeechWithTextPlainInput = async (datas) => {
 };
 
 export const textToSpeechWithFileInput = async (formData) => {
-
   try {
     // Fetch request to API
-    const response = await fetch(AI_DOMAIN + "text-file-to-speech-and-infer/", {
-      method: "POST",
-      body: formData,
-    });
+    const response = await fetch(
+      BE_DOMAIN + "api/models/text-file-to-speech-and-infer/",
+      {
+        method: "POST",
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${getCookie("token")}`,
+        },
+      }
+    );
 
     // Handle errors in the response
     if (!response.ok) {
@@ -49,14 +54,9 @@ export const textToSpeechWithFileInput = async (formData) => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    // Process the response as a blob since it's an audio file
-    const audioBlob = await response.blob();
-
-    // Create a URL from the blob
-    const audioUrl = URL.createObjectURL(audioBlob);
-
-    // Return the audio URL so it can be used to play the audio
-    return audioUrl;
+    const result = await response.json();
+    console.log(result.url);
+    return result.url;
   } catch (error) {
     console.error("Failed to process the audio:", error);
     throw error;
