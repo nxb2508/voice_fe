@@ -11,7 +11,7 @@ import {
   Row,
   Col,
 } from "antd";
-
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import AudioPlayer from "../../components/AudioPlayer";
 import { getCookie } from "../../helper/cookie";
 import {
@@ -186,6 +186,8 @@ function History() {
                       setRecord(item);
                       showModal();
                     }}
+                    style={{ backgroundColor: "rgb(208, 180, 253)" }}
+                    icon={<EditOutlined />}
                   >
                     Edit
                   </Button>,
@@ -193,7 +195,10 @@ function History() {
                     title="Are you sure you want to delete this audio?"
                     onConfirm={() => handleDelete(item.id)}
                   >
-                    <Button type="primary">Delete</Button>,
+                    <Button type="primary"
+                      icon={<DeleteOutlined />}
+                      style={{ backgroundColor: "rgb(208, 180, 253)" }}
+                    >Delete</Button>,
                   </Popconfirm>,
                 ]}
               >

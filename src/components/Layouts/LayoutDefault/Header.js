@@ -388,7 +388,6 @@ function Header() {
                     {"Manage Model"}
                   </NavLink>
                   <Collapse
-                    defaultActiveKey={["1"]}
                     items={accordionItems}
                     bordered={false}
                     onChange={handleToggleExpand}
